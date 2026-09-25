@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>hennys.de</title>
 <style>
   /* Fonts selbst gehostet (keine Anfrage an Google-Server -> kein Datenschutz-Thema) */
@@ -70,7 +71,6 @@
   .section-head p { color: var(--ink-soft); margin: 8px 0 0; max-width: 60ch; }
 
   .projects { display: grid; grid-template-columns: 1fr; gap: 28px; }
-  @media (min-width: 720px) { .projects { grid-template-columns: 1fr 1fr; } }
 
   .card {
     background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
@@ -78,6 +78,7 @@
   }
   .card .shot { display: block; width: 100%; aspect-ratio: 16 / 11; object-fit: cover; object-position: top;
     background: var(--surface-2); border-bottom: 1px solid var(--line); }
+  .card .shot.video-shot { aspect-ratio: 1734 / 780; object-position: center; }
   .card .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
   .card .kicker { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-strong); }
   .card h3 { font-size: 20px; font-weight: 700; }
@@ -142,7 +143,7 @@
   <div class="projects">
 
     <article class="card">
-      <video class="shot" autoplay muted loop playsinline aria-label="LooperDisplay im Browser: drei Ringe zeigen Play, Record und Stop"><source src="VideoLooper.mp4" type="video/mp4"><source src="VideoLooper.mov" type="video/quicktime"></video>
+      <video class="shot video-shot" autoplay muted loop playsinline aria-label="LooperDisplay im Browser: drei Ringe zeigen Play, Record und Stop"><source src="VideoLooper.mp4" type="video/mp4"><source src="VideoLooper.mov" type="video/quicktime"></video>
       <div class="body">
         <span class="kicker">Stage</span>
         <h3>LooperDisplay</h3>
