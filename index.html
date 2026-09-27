@@ -80,6 +80,8 @@
     background: var(--surface-2); border-bottom: 1px solid var(--line); }
   .card .shot.video-shot { aspect-ratio: 1734 / 780; object-position: center; }
   .card .shot.slide-shot { aspect-ratio: 1376 / 768; object-position: center; }
+  .card .shot.beatbox-shot { object-position: center; }
+  .card .shot-link { display: block; }
   .card .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
   .card .card-head { padding: 18px 22px 14px; display: flex; flex-direction: column; gap: 4px; }
   .card .shot { border-top: 1px solid var(--line); height: auto; }
@@ -183,6 +185,26 @@
         <div class="card-links">
           <a class="btn primary" href="https://hennydrums.github.io/morningstar-live-clips/" target="_blank" rel="noopener">Guide</a>
           <a class="btn" href="https://github.com/hennydrums/morningstar-live-clips/releases/latest" target="_blank" rel="noopener">Download</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-head">
+        <span class="kicker">Stage</span>
+        <h3>BeatBox</h3>
+      </div>
+      <a class="shot-link" href="https://www.youtube.com/watch?v=GAWbC6CEUNw" target="_blank" rel="noopener" aria-label="BeatBox-Video auf YouTube ansehen"><video class="shot beatbox-shot" autoplay muted loop playsinline poster="beatbox-poster.jpg" aria-label="BeatBox neben einem MacBook mit Ableton Live"><source src="beatbox.mp4" type="video/mp4"></video></a>
+      <div class="body">
+        <p class="desc">A DIY Arduino trigger module that turns Ableton Live's click into light, so the beat is visible on stage. Two built-in buttons and an external trigger input control Live as well.</p>
+        <div class="chips">
+          <span class="chip">Arduino</span>
+          <span class="chip">MIDI</span>
+          <span class="chip">Ableton Live</span>
+          <span class="chip">DIY hardware</span>
+        </div>
+        <div class="card-links">
+          <a class="btn primary" href="https://www.youtube.com/watch?v=GAWbC6CEUNw" target="_blank" rel="noopener">Watch on YouTube</a>
         </div>
       </div>
     </article>
