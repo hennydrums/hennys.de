@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b0d">
+<title>StageCase – Musical Director for Ableton Live</title>
+<meta name="description" content="StageCase – the musical director for Ableton Live: loopers, clips, setlist, lead sheet, mixer and audio interface in one app, on the Mac and on every tablet. From the rehearsal room to the stage.">
+<link rel="icon" href="icon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  /* StageCase-Homepage (Testversion auf hennys.de, spaeter stagecase.app). Systemschrift, keine externen Dateien.
+     Aufbau wie die Startseite der App: Schriftzug mit Case-Ecken, darunter die Seiten als Kacheln. Klick auf eine
+     Kachel oeffnet die "Buehne": links ein animierter Bildschirm (gezeichnet, kein Video), rechts die Kapitel. */
+  :root { color-scheme: dark; --bg: #0b0b0d; --card: #17171b; --cell: #1d1d22; --line: #2c2c32; --fg: #f2f2f2; --dim: #a6a6ae; --faint: #6b6b74;
+    --play: #34c759; --rec: #ff3b30; --dub: #0a84ff; --warn: #ffd60a; --or: #ff9f0a; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); overflow-x: hidden; }
+  body { font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  .head { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; font-size: 14px; color: var(--dim); }
+  .head a { text-decoration: none; color: var(--dim); } .head a:hover { color: var(--fg); }
+  .lang button { background: none; border: 1px solid var(--line); color: var(--dim); border-radius: 6px; padding: 3px 8px; font: 600 12px inherit; cursor: pointer; }
+  .lang button.on { color: var(--fg); border-color: var(--faint); }
+
+  /* ---------- Kopf: Schriftzug ---------- */
+  .hero { text-align: center; padding: 6vh 0 2vh; }
+  .wm { width: min(78vw, 640px); height: auto; display: block; margin: 0 auto; overflow: visible; }
+  .wm .mark { opacity: 0; animation: in .5s cubic-bezier(.2,.8,.2,1) .1s forwards; transform-origin: 196px 55px; }
+  .wm .corners { opacity: 0; animation: flash 3s ease-out .3s forwards; }
+  @keyframes in { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+  @keyframes flash { 0% { opacity: 0; filter: none; } 10%, 36%, 62% { opacity: 1; filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #fff); }
+    23%, 49% { opacity: .35; filter: none; } 100% { opacity: 1; filter: none; } }
+  .claim { font-size: clamp(20px, 2.6vw, 30px); font-weight: 700; margin: 26px auto 8px; max-width: 760px; letter-spacing: -.01em; }
+  .sub { color: var(--dim); max-width: 720px; margin: 0 auto; font-size: 17px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 26px 0 0; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 11px; font-weight: 700; text-decoration: none;
+    border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  .btn.main { background: var(--fg); color: #0b0b0d; border-color: transparent; }
+  .btn:hover { border-color: var(--faint); }
+  .badge { display: inline-block; margin-top: 18px; font-size: 12px; letter-spacing: .14em; color: var(--faint); }
+
+  /* ---------- Kacheln ---------- */
+  h2 { font-size: clamp(22px, 2.4vw, 30px); margin: 0 0 6px; letter-spacing: -.01em; }
+  .sect { padding: 7vh 0 2vh; }
+  .sect > p.lead { color: var(--dim); margin: 0 0 24px; max-width: 760px; }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 960px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .tiles { grid-template-columns: 1fr; } }
+  .tile { position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 160px; padding: 20px 20px 38px; border-radius: 16px; cursor: pointer;
+    text-align: left; color: var(--fg); font: inherit; border: 1px solid var(--line); box-shadow: inset 0 3px 0 var(--c);
+    background: linear-gradient(160deg, color-mix(in srgb, var(--c) 16%, var(--card)), var(--card) 70%);
+    opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(.85);
+    transition: opacity .35s ease, transform .75s cubic-bezier(.18,.95,.3,1.12), border-color .2s; }
+  .tiles.in .tile { opacity: 1; transform: none; }
+  .tile:hover, .tile:focus-visible { border-color: var(--c); outline: none; }
+  .tile .ic { font-size: 30px; line-height: 1; } .tile b { font-size: 19px; } .tile span { color: var(--dim); font-size: 13.5px; line-height: 1.45; }
+  .tile .go { position: absolute; right: 16px; bottom: 14px; font-size: 12px; font-weight: 700; color: var(--c); opacity: .8; }
+
+  /* ---------- Buehne (Overlay) ---------- */
+  .stage { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 3vh 3vw; background: rgba(5,5,7,.78);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .stage.open { opacity: 1; pointer-events: auto; }
+  .sbox { position: relative; width: min(1180px, 100%); max-height: 94vh; overflow: auto; display: grid; grid-template-columns: 1.35fr 1fr; gap: 26px;
+    padding: 26px; border-radius: 20px; background: #121215; border: 1px solid var(--line); box-shadow: 0 30px 80px #000a, inset 0 3px 0 var(--c);
+    transform: translateY(24px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+  .stage.open .sbox { transform: none; }
+  @media (max-width: 900px) { .sbox { grid-template-columns: 1fr; } }
+  .close { position: absolute; top: 12px; right: 14px; border: 0; background: none; color: var(--dim); font-size: 22px; cursor: pointer; z-index: 2; }
+  .close:hover { color: var(--fg); }
+  .ttl { display: flex; align-items: center; gap: 12px; margin: 0 0 4px; } .ttl .ic { font-size: 28px; } .ttl h3 { margin: 0; font-size: 26px; }
+  .one { color: var(--dim); margin: 0 0 18px; }
+  .chap { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .chap li { position: relative; padding: 12px 14px 12px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); cursor: pointer; overflow: hidden; }
+  .chap li b { display: block; font-size: 15px; } .chap li span { display: block; color: var(--dim); font-size: 13.5px; margin-top: 2px; }
+  .chap li.on { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, var(--card)); }
+  .chap li .bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--c); }
+  .chap li.on .bar { animation: bar var(--dur, 4.2s) linear forwards; }
+  .paused .chap li.on .bar { animation-play-state: paused; }
+  @keyframes bar { to { width: 100%; } }
+  .nav { display: flex; gap: 8px; margin-top: 14px; align-items: center; color: var(--faint); font-size: 12px; }
+  .nav button { height: 34px; min-width: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; font-weight: 700; }
+  .nav .sp { flex: 1; }
+
+  /* Bildschirm (MacBook-artig) */
+  .screen { position: relative; aspect-ratio: 16 / 10; border-radius: 14px; background: #0b0b0d; border: 8px solid #222226; box-shadow: 0 0 0 1px #3a3a40, 0 20px 50px #0008;
+    overflow: hidden; container-type: inline-size; }
+  .screen .tb { position: absolute; left: 0; right: 0; top: 0; height: 7%; display: flex; align-items: center; gap: 2.4cqw; padding: 0 2.4cqw; font-size: 1.7cqw;
+    color: #8a8a92; border-bottom: 1px solid #1f1f24; background: #101013; }
+  .screen .tb b { color: #f2f2f2; } .screen .tb i { width: 2.2cqw; height: 2.2cqw; border-radius: 50%; display: inline-block; background: conic-gradient(var(--play) 0 75%, #2a2a30 0); }
+  .screen .tb .sp { flex: 1; } .screen .tb .live { display: inline-flex; align-items: center; gap: .8cqw; } .screen .tb .live::before { content: ""; width: 1.2cqw; height: 1.2cqw; border-radius: 50%; background: var(--play); }
+  .scn { position: absolute; inset: 7% 0 0 0; padding: 3cqw; font-size: 1.8cqw; color: #d8d8de; }
+  .cap { position: absolute; left: 3cqw; bottom: 2.6cqw; right: 3cqw; font-size: 2.1cqw; font-weight: 700; color: #fff; text-shadow: 0 2px 8px #000;
+    opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .4s; pointer-events: none; }
+  .screen .cap.show { opacity: 1; transform: none; }
+  .tap { position: absolute; width: 5cqw; height: 5cqw; margin: -2.5cqw 0 0 -2.5cqw; border-radius: 50%; border: .5cqw solid #fff; opacity: 0; pointer-events: none; }
+  .tap.go { animation: tap .9s ease-out; }
+  @keyframes tap { 0% { opacity: .9; transform: scale(.4); } 100% { opacity: 0; transform: scale(1.6); } }
+
+  /* --- Szene Looper --- */
+  .lp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2cqw; margin-top: 2cqw; }
+  .ring { position: relative; aspect-ratio: 1; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .bg { fill: none; stroke: #23232a; stroke-width: 9; }
+  .ring .pr { fill: none; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 251; stroke-dashoffset: 251; transition: stroke .3s; }
+  .ring .in { fill: #15151a; }
+  .ring .lb { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-weight: 800; font-size: 2.2cqw; color: #fff; }
+  .ring .lb small { display: block; font-size: 1.3cqw; color: #9a9aa4; font-weight: 600; }
+  .ring.play .pr { stroke: var(--play); animation: spin 2.4s linear infinite; } .ring.rec .pr { stroke: var(--rec); animation: spin 2.4s linear infinite; }
+  .ring.dub .pr { stroke: var(--dub); animation: spin 2.4s linear infinite; } .ring.stop .pr { stroke: #55555c; stroke-dashoffset: 0; }
+  .ring.sel::after { content: ""; position: absolute; inset: -6%; border-radius: 50%; border: .5cqw solid var(--warn); }
+  @keyframes spin { to { stroke-dashoffset: 0; } }
+  .lp .ring { transition: opacity .8s; } .faded .lp .ring { opacity: .25; }
+  .ctrl { position: absolute; right: 3cqw; bottom: 9cqw; display: flex; gap: 1cqw; opacity: 0; transition: opacity .4s; }
+  .ctrl.show { opacity: 1; } .ctrl i { width: 6cqw; height: 4cqw; border-radius: .8cqw; background: #2a2a30; border: 1px solid #3a3a40; }
+  .ctrl i.hot { background: var(--rec); box-shadow: 0 0 2cqw var(--rec); }
+  .clipcard { position: absolute; left: 30%; top: 40%; width: 18cqw; padding: 1.2cqw; border-radius: 1cqw; background: var(--play); color: #0b0b0d; font-weight: 800;
+    font-size: 1.6cqw; opacity: 0; transform: translate(0, 0) scale(.8); }
+  .clipcard.go { animation: clip 2.6s ease-in-out forwards; }
+  @keyframes clip { 0% { opacity: 0; transform: scale(.6); } 20% { opacity: 1; transform: scale(1); } 70% { opacity: 1; transform: translate(40cqw, 12cqw) scale(.6); } 100% { opacity: 0; transform: translate(40cqw, 12cqw) scale(.6); } }
+
+  /* --- Szene Clips --- */
+  .grid { display: grid; grid-template-columns: 9cqw repeat(7, 1fr); gap: .8cqw; }
+  .grid .h { font-size: 1.4cqw; color: #9a9aa4; text-align: center; padding: .4cqw 0; border-radius: .6cqw; transition: box-shadow .4s; }
+  .grid .sc { font-size: 1.4cqw; color: #d8d8de; background: #1b1b20; border-radius: .6cqw; padding: .6cqw; white-space: nowrap; overflow: hidden; display: flex; gap: .6cqw; align-items: center; }
+  .grid .sc em { font-style: normal; font-size: 1.1cqw; color: var(--warn); background: #ffd60a22; border-radius: .4cqw; padding: 0 .5cqw; opacity: 0; transition: opacity .4s; }
+  .tempo .grid .sc em { opacity: 1; }
+  .grid .c { height: 4.6cqw; border-radius: .6cqw; background: #1b1b20; transition: background .3s, box-shadow .3s; }
+  .grid .c.f { background: #3a3f55; } .grid .c.p { background: var(--play); box-shadow: 0 0 1.4cqw #34c75988; } .grid .c.r { background: var(--rec); box-shadow: 0 0 1.4cqw #ff3b3088; animation: blink .6s infinite alternate; }
+  @keyframes blink { to { opacity: .55; } }
+  .range .grid .h.in { box-shadow: inset 0 -.4cqw 0 var(--warn); color: #fff; }
+  .mc6 { position: absolute; right: 3cqw; bottom: 8cqw; display: grid; grid-template-columns: repeat(3, 5.4cqw); gap: 1cqw; padding: 1.2cqw; border-radius: 1.2cqw; background: #18181c; border: 1px solid #333;
+    opacity: 0; transform: translateY(2cqw); transition: opacity .4s, transform .4s; }
+  .foot .mc6 { opacity: 1; transform: none; }
+  .mc6 i { aspect-ratio: 1; border-radius: 50%; background: #2c2c33; border: .3cqw solid #444; display: grid; place-items: center; font-style: normal; font-size: 1.4cqw; font-weight: 800; color: #aaa; }
+  .mc6 i.hot { background: #ffd60a; color: #000; box-shadow: 0 0 2cqw #ffd60a; }
+
+  /* --- Szene Songs --- */
+  .songs { display: grid; grid-template-columns: 34% 1fr; gap: 2.4cqw; height: 100%; }
+  .sl { display: flex; flex-direction: column; gap: .8cqw; }
+  .sl div { padding: 1cqw 1.4cqw; border-radius: .8cqw; background: #1b1b20; display: flex; justify-content: space-between; font-size: 1.6cqw; transition: all .4s; border-left: .5cqw solid var(--sc, #444); }
+  .sl div.cur { box-shadow: 0 0 0 .3cqw var(--warn); } .sl small { color: #9a9aa4; }
+  .cs { display: flex; flex-direction: column; gap: 1.4cqw; }
+  .cs .tt { font-size: 3cqw; font-weight: 800; } .cs .tt small { font-size: 1.6cqw; color: #9a9aa4; font-weight: 600; margin-left: 1cqw; }
+  .prog { height: 1cqw; border-radius: 1cqw; background: #222; overflow: hidden; } .prog i { display: block; height: 100%; width: 10%; background: var(--or); transition: width 3.8s linear; }
+  .secs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1cqw; }
+  .secs div { height: 7cqw; border-radius: 1cqw; background: color-mix(in srgb, var(--sc) 25%, #1b1b20); border-top: .5cqw solid var(--sc); display: grid; place-items: center; font-weight: 800; font-size: 1.8cqw; transition: box-shadow .3s; position: relative; }
+  .secs div.cur { box-shadow: 0 0 0 .35cqw #fff; } .secs div.loop::after { content: "⟳ 4×"; position: absolute; right: .8cqw; top: .6cqw; font-size: 1.2cqw; color: var(--warn); }
+  .stopb { align-self: flex-start; font-size: 1.5cqw; padding: .6cqw 1.2cqw; border-radius: .8cqw; border: 1px solid #444; color: #aaa; transition: all .3s; }
+  .stopb.on { background: var(--rec); color: #fff; border-color: transparent; }
+  .bpm { font-size: 1.8cqw; color: var(--warn); font-weight: 800; transition: transform .3s; } .bpm.pop { transform: scale(1.3); }
+
+  /* --- Szene Lead Sheet --- */
+  .ls { display: grid; grid-template-columns: 1fr 30%; gap: 2.4cqw; height: 100%; }
+  .paper { background: #fbf7ea; color: #1b1b1f; border-radius: .8cqw; padding: 2.4cqw 3cqw; font-size: 1.9cqw; line-height: 1.25; overflow: hidden; }
+  .paper h4 { margin: 0 0 1cqw; font-size: 2.8cqw; } .paper .sec { font-weight: 800; letter-spacing: .1em; color: #6b6b6b; font-size: 1.4cqw; margin: 1.2cqw 0 .4cqw; }
+  .paper .ln { position: relative; padding: .3cqw .6cqw; border-radius: .6cqw; margin: 0 -.6cqw; transition: background .3s; }
+  .paper .ln .ch { display: block; color: #2f5fd0; font-weight: 800; font-size: 1.5cqw; height: 1.9cqw; word-spacing: 6cqw; }
+  .paper .ln.cur { background: #ffe9a8; }
+  .side { display: flex; flex-direction: column; gap: 1.4cqw; }
+  .fb { background: #18181c; border-radius: 1cqw; padding: 1.2cqw; }
+  .fb .n { font-size: 1.4cqw; color: #9a9aa4; } .fb .n b { color: var(--warn); font-size: 2.4cqw; margin-left: .6cqw; }
+  .frets { position: relative; height: 9cqw; margin-top: .6cqw; border-radius: .5cqw; background: repeating-linear-gradient(90deg, #3a2a1c 0 4.2cqw, #b9b2a2 4.2cqw 4.4cqw), #3a2a1c; }
+  .frets::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 1.6cqw, #d8d2c4 1.6cqw 1.75cqw); opacity: .7; }
+  .frets i { position: absolute; width: 1.8cqw; height: 1.8cqw; margin: -.9cqw 0 0 -.9cqw; border-radius: 50%; background: var(--warn); border: .2cqw solid #000; transition: left .35s, top .35s; }
+  .staff { position: relative; height: 9cqw; background: #18181c; border-radius: 1cqw; overflow: hidden; }
+  .staff::before { content: ""; position: absolute; left: 1cqw; right: 1cqw; top: 2.4cqw; height: 4.4cqw; background: repeating-linear-gradient(0deg, #8a8a94 0 .15cqw, transparent .15cqw 1.1cqw); }
+  .staff i { position: absolute; width: 1.5cqw; height: 1.1cqw; border-radius: 50%; background: #eee; transform: rotate(-20deg); }
+  .staff i::after { content: ""; position: absolute; right: 0; bottom: .4cqw; width: .2cqw; height: 3.4cqw; background: #eee; }
+  .staff b { position: absolute; top: 1cqw; bottom: 1cqw; width: .3cqw; background: var(--warn); left: 10%; }
+  .notes .staff b { animation: ph 3.6s linear infinite; } @keyframes ph { from { left: 8%; } to { left: 92%; } }
+  .trp { display: inline-flex; gap: .6cqw; align-items: center; font-size: 1.5cqw; color: #9a9aa4; }
+  .trp i { font-style: normal; border: 1px solid #444; border-radius: .6cqw; padding: .2cqw .8cqw; color: #fff; } .trp b { color: var(--warn); }
+
+  /* --- Szene Mixer --- */
+  .mx { display: flex; gap: 2cqw; height: 100%; align-items: stretch; padding-bottom: 6cqw; }
+  .st { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1cqw; background: #16161a; border-radius: 1cqw; padding: 1.2cqw .6cqw; border-top: .5cqw solid var(--sc); }
+  .st .nm { font-size: 1.3cqw; font-weight: 800; text-align: center; }
+  .st .tr { position: relative; flex: 1; width: 1cqw; border-radius: 1cqw; background: #2a2a30; }
+  .st .kn { position: absolute; left: 50%; width: 4cqw; height: 2cqw; margin: -1cqw 0 0 -2cqw; border-radius: .5cqw; background: #d8d8de; transition: top .9s cubic-bezier(.3,.8,.3,1); }
+  .st .mu { font-size: 1.3cqw; font-weight: 800; padding: .3cqw 1cqw; border-radius: .5cqw; background: #2a2a30; color: #aaa; transition: all .3s; }
+  .st .mu.on { background: var(--warn); color: #000; }
+  .st.guide .nm::after { content: " GUIDE"; color: var(--warn); font-size: 1cqw; }
+  .pre { position: absolute; left: 3cqw; bottom: 2cqw; display: flex; gap: 1cqw; } .pre i { font-style: normal; font-size: 1.4cqw; padding: .5cqw 1.2cqw; border-radius: .7cqw; background: #222; border: 1px solid #3a3a40; transition: all .3s; }
+  .pre i.on { background: var(--fg); color: #000; }
+
+  /* --- Szene Soundkarte --- */
+  .map { position: relative; height: 100%; }
+  .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .map .bx { position: absolute; width: 17cqw; padding: .8cqw 1.2cqw; border-radius: .9cqw; font-size: 1.5cqw; font-weight: 800; background: #1d1d22; border: 1px solid #3a3a40; transition: left .9s cubic-bezier(.3,.8,.3,1), top .9s cubic-bezier(.3,.8,.3,1), box-shadow .3s; }
+  .map .bx small { display: block; font-weight: 600; color: #9a9aa4; font-size: 1.1cqw; }
+  .map .bx.in { border-left: .5cqw solid var(--dub); } .map .bx.tr { border-left: .5cqw solid var(--play); } .map .bx.out { border-left: .5cqw solid var(--or); }
+  .map .bx.diff { box-shadow: 0 0 0 .35cqw var(--warn); }
+  .map path { fill: none; stroke: #8a8a94; stroke-width: .35; stroke-dasharray: 200; stroke-dashoffset: 200; transition: stroke-dashoffset 1.2s ease, stroke .3s; }
+  .draw .map path { stroke-dashoffset: 0; } .map path.d { stroke: var(--warn); stroke-dasharray: 2 1.4; }
+  .tabs { position: absolute; left: 0; top: 0; display: flex; gap: 1cqw; } .tabs i { font-style: normal; font-size: 1.4cqw; padding: .5cqw 1.2cqw; border-radius: .7cqw; background: #222; border: 1px solid #3a3a40; transition: all .3s; }
+  .tabs i.on { background: var(--fg); color: #000; }
+  .apply { position: absolute; right: 0; top: 0; font-size: 1.4cqw; padding: .5cqw 1.4cqw; border-radius: .7cqw; background: var(--warn); color: #000; font-weight: 800; opacity: 0; transition: opacity .3s; }
+  .cmp .apply { opacity: 1; }
+
+  /* --- Szene MIDI --- */
+  .mm { display: flex; flex-direction: column; gap: 3cqw; }
+  .keys { display: flex; gap: 1.2cqw; flex-wrap: wrap; }
+  .keys i { position: relative; font-style: normal; font-size: 1.6cqw; font-weight: 800; padding: 1cqw 1.8cqw; border-radius: 1cqw; background: #1d1d22; border: 1px solid #3a3a40; transition: all .3s; }
+  .keys i.wait { border-color: var(--warn); box-shadow: 0 0 0 .3cqw #ffd60a55; animation: blink .5s infinite alternate; }
+  .keys i .tag { position: absolute; left: 50%; top: -2.6cqw; transform: translateX(-50%); font-size: 1.1cqw; white-space: nowrap; color: #000; background: var(--play); border-radius: .5cqw; padding: .2cqw .6cqw; opacity: 0; transition: opacity .3s; }
+  .keys i.ok .tag { opacity: 1; }
+  .dev { display: flex; align-items: center; gap: 2cqw; font-size: 1.5cqw; }
+  .dev .k { display: flex; gap: .6cqw; padding: 1cqw; background: #18181c; border-radius: 1cqw; border: 1px solid #333; }
+  .dev .k i { width: 3.4cqw; height: 6cqw; border-radius: .5cqw; background: #e8e8ec; } .dev .k i.hot { background: var(--warn); box-shadow: 0 0 2cqw var(--warn); }
+  .hub { display: flex; align-items: center; gap: 1.4cqw; font-size: 1.5cqw; opacity: .35; transition: opacity .4s; } .port .hub { opacity: 1; }
+  .hub span { padding: .8cqw 1.2cqw; border-radius: .8cqw; background: #1d1d22; border: 1px solid #3a3a40; } .hub b { color: var(--or); } .hub .ar { color: #9a9aa4; border: 0; background: none; }
+
+  /* --- Szene Hilfe --- */
+  .hp { display: flex; flex-direction: column; gap: 2cqw; }
+  .search { font-size: 2cqw; padding: 1.2cqw 1.8cqw; border-radius: 1.2cqw; background: #1d1d22; border: 1px solid #3a3a40; min-height: 4.6cqw; }
+  .search::after { content: "|"; animation: blink .5s infinite alternate; color: var(--warn); }
+  .res { display: flex; flex-direction: column; gap: 1cqw; } .res div { padding: 1cqw 1.6cqw; border-radius: 1cqw; background: #16161a; font-size: 1.6cqw; opacity: 0; transform: translateY(1cqw); transition: all .3s; }
+  .res div.show { opacity: 1; transform: none; } .res div b { color: var(--warn); } .res div.hit { box-shadow: 0 0 0 .3cqw var(--warn); }
+  .tabkey { align-self: flex-start; font-size: 1.8cqw; font-weight: 800; padding: 1cqw 2.4cqw; border-radius: 1cqw; background: #e8e8ec; color: #111; box-shadow: 0 .6cqw 0 #999; opacity: 0; transition: all .3s; }
+  .tabkey.show { opacity: 1; } .tabkey.down { transform: translateY(.5cqw); box-shadow: 0 .1cqw 0 #999; }
+
+  /* ---------- Weitere Abschnitte ---------- */
+  .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 14px; align-items: center; margin-top: 10px; }
+  @media (max-width: 760px) { .flow { grid-template-columns: 1fr; } .flow .ar { transform: rotate(90deg); justify-self: center; } }
+  .fbox { padding: 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); }
+  .fbox b { display: block; font-size: 17px; margin-bottom: 4px; } .fbox span { color: var(--dim); font-size: 14px; }
+  .fbox.mid { border-color: var(--or); box-shadow: 0 0 30px #ff9f0a22; } .flow .ar { color: var(--faint); font-size: 26px; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; } @media (max-width: 760px) { .facts { grid-template-columns: 1fr; } }
+  .facts div { padding: 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); } .facts b { display: block; margin-bottom: 4px; } .facts span { color: var(--dim); font-size: 14px; }
+  .end { text-align: center; padding: 8vh 0 6vh; }
+  footer { border-top: 1px solid var(--line); padding: 20px 0 40px; color: var(--faint); font-size: 13px; display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  footer a { color: var(--dim); text-decoration: none; margin-right: 14px; }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; } .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .tile, .reveal { opacity: 1 !important; transform: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><a href="../">← hennys.de</a><span class="lang"><button type="button" data-l="de">DE</button> <button type="button" data-l="en">EN</button></span></div>
+
+  <section class="hero">
+    <svg class="wm" viewBox="0 0 392 110" role="img" aria-label="StageCase">
+      <defs><linearGradient id="sv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#d4d9de"/><stop offset="1" stop-color="#a9b0b7"/></linearGradient></defs>
+      <g class="corners" fill="none" stroke="url(#sv)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M344 4 H369 a13 13 0 0 1 13 13 V42"/><path d="M40 98 H15 a13 13 0 0 1 -13 -13 V60"/></g>
+      <g class="mark"><svg x="20" y="20" width="58" height="58" viewBox="0 0 512 512"><circle cx="256" cy="256" r="176" fill="none" stroke="#2a2a30" stroke-width="44"/>
+        <path d="M256 80 A176 176 0 1 1 80 256" fill="none" stroke="#34c759" stroke-width="44" stroke-linecap="round"/><path d="M256 256 V154 A102 102 0 1 1 154 256 Z" fill="#ff9f0a"/></svg>
+        <text x="94" y="64" font-family="Avenir Next, Helvetica Neue, Helvetica, Arial" font-weight="800" font-size="42" letter-spacing="-0.5"><tspan fill="#fff">Stage</tspan><tspan fill="#ff9f0a">Case</tspan></text>
+        <text x="95" y="85" font-family="-apple-system, Helvetica, Arial" font-size="10.5" letter-spacing="2" fill="#9a9aa4">MUSICAL DIRECTOR FOR ABLETON LIVE</text></g>
+    </svg>
+    <p class="claim" data-t="claim"></p>
+    <p class="sub" data-t="sub"></p>
+    <div class="cta"><a class="btn main" href="#seiten" data-t="cta1"></a><a class="btn" href="mailto:drumset@hennys.de?subject=StageCase%20Beta" data-t="cta2"></a><a class="btn" href="https://looperpilot.github.io/install.html" target="_blank" rel="noopener" data-t="cta3"></a></div>
+    <div class="badge" data-t="badge"></div>
+  </section>
+
+  <section class="sect" id="seiten">
+    <h2 data-t="tilesH"></h2>
+    <p class="lead" data-t="tilesP"></p>
+    <nav class="tiles" id="tiles"></nav>
+  </section>
+
+  <section class="sect reveal">
+    <h2 data-t="flowH"></h2>
+    <p class="lead" data-t="flowP"></p>
+    <div class="flow">
+      <div class="fbox"><b data-t="f1b"></b><span data-t="f1s"></span></div><div class="ar">→</div>
+      <div class="fbox mid"><b>StageCase</b><span data-t="f2s"></span></div><div class="ar">→</div>
+      <div class="fbox"><b>Ableton Live</b><span data-t="f3s"></span></div>
+    </div>
+  </section>
+
+  <section class="sect reveal">
+    <h2 data-t="factsH"></h2>
+    <div class="facts">
+      <div><b data-t="x1b"></b><span data-t="x1s"></span></div>
+      <div><b data-t="x2b"></b><span data-t="x2s"></span></div>
+      <div><b data-t="x3b"></b><span data-t="x3s"></span></div>
+    </div>
+  </section>
+
+  <section class="end reveal">
+    <h2 data-t="endH"></h2>
+    <p class="lead" style="margin:8px auto 0;color:var(--dim)" data-t="endP"></p>
+    <div class="cta"><a class="btn main" href="mailto:drumset@hennys.de?subject=StageCase%20Beta" data-t="cta2"></a></div>
+  </section>
+
+  <footer><span data-t="tm"></span><span><a href="../impressum.html" data-t="imp"></a><a href="../datenschutz.html" data-t="dat"></a></span></footer>
+</div>
+
+<div class="stage" id="stage" aria-hidden="true">
+  <div class="sbox" role="dialog" aria-modal="true">
+    <button type="button" class="close" id="close" aria-label="close">✕</button>
+    <div>
+      <div class="screen" id="screen"><div class="tb"><i></i><span id="tbNav"></span><span class="sp"></span><span class="live">Live</span><b>StageCase</b></div><div id="scn"></div><div class="cap" id="cap"></div></div>
+    </div>
+    <div>
+      <div class="ttl"><span class="ic" id="sIc"></span><h3 id="sTitle"></h3></div>
+      <p class="one" id="sOne"></p>
+      <ol class="chap" id="chap"></ol>
+      <div class="nav"><button type="button" id="prev">‹</button><button type="button" id="play">❚❚</button><button type="button" id="next">›</button><span class="sp"></span><span id="hint"></span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ---------------------------------------------------------------- Texte DE / EN
+  const TX = {
+    claim: ['The musical director for Ableton Live – from the rehearsal room to the stage.', 'Der Musical Director für Ableton Live – vom Proberaum bis auf die Bühne.'],
+    sub: ['Loopers, clips, setlist, lead sheet, mixer and audio interface in one app – on the Mac and on every tablet in the room. Your controllers plug straight in.',
+      'Looper, Clips, Setlist, Lead Sheet, Mixer und Soundkarte in einer App – am Mac und auf jedem Tablet im Raum. Deine Controller stecken einfach mit drin.'],
+    cta1: ['▶ Take the tour', '▶ Rundgang starten'], cta2: ['✉ Request beta access', '✉ Beta-Zugang anfragen'], cta3: ['Guide for testers', 'Anleitung für Tester'],
+    badge: ['BETA · INVITED TESTERS · MACOS', 'BETA · FÜR EINGELADENE TESTER · MACOS'],
+    tilesH: ['Everything in one case', 'Alles in einem Case'],
+    tilesP: ['Exactly like the start page of the app: tap a tile and watch what the page does.', 'Genau wie auf der Startseite der App: Tipp auf eine Kachel und sieh dir an, was die Seite kann.'],
+    flowH: ['One script. One slot. Every controller.', 'Ein Script. Ein Slot. Jeder Controller.'],
+    flowP: ['StageCase brings its own MIDI connection. In Live you set up exactly one control surface – your devices are found automatically, even when you plug them in later.',
+      'StageCase bringt einen eigenen MIDI-Anschluss mit. In Live richtest du genau eine Bedienoberfläche ein – deine Geräte werden automatisch gefunden, auch wenn du sie später einsteckst.'],
+    f1b: ['Your controllers', 'Deine Controller'], f1s: ['KORG nanoKONTROL2, Morningstar MC6 Pro, Roland SPD-SX PRO – LEDs and displays included', 'KORG nanoKONTROL2, Morningstar MC6 Pro, Roland SPD-SX PRO – mit LEDs und Displays'],
+    f2s: ['finds every device and passes it on, each on its own channel', 'findet jedes Gerät und reicht es weiter, jedes auf seinem eigenen Kanal'],
+    f3s: ['one control surface: “Stagecase”, input and output “Stagecase”', 'eine Bedienoberfläche: „Stagecase“, Eingang und Ausgang „Stagecase“'],
+    factsH: ['What you need', 'Was du brauchst'],
+    x1b: ['A Mac', 'Einen Mac'], x1s: ['macOS 12 or newer. The app runs in its own window – tablets and phones join through the browser.', 'macOS 12 oder neuer. Die App läuft im eigenen Fenster – Tablets und Handys kommen per Browser dazu.'],
+    x2b: ['Ableton Live 12', 'Ableton Live 12'], x2s: ['Live 12 lets StageCase drive the loopers directly. Live 11 works for display, songs, clips and mixer.', 'Mit Live 12 bedient StageCase die Looper direkt. Live 11 geht für Anzeige, Songs, Clips und Mixer.'],
+    x3b: ['Nothing else', 'Sonst nichts'], x3s: ['No MIDI mappings, no IAC bus, no extra hardware. Controllers are optional.', 'Keine MIDI-Zuweisungen, kein IAC-Bus, keine Extra-Hardware. Controller sind optional.'],
+    endH: ['Want to try it?', 'Lust auszuprobieren?'], endP: ['StageCase is in beta. Drop me a line and you’ll get an invitation.', 'StageCase ist in der Beta. Schreib mir kurz, dann bekommst du eine Einladung.'],
+    tm: ['Ableton and Live are trademarks of Ableton AG. StageCase is not a product of Ableton.', 'Ableton und Live sind Marken der Ableton AG. StageCase ist kein Produkt von Ableton.'],
+    imp: ['Imprint', 'Impressum'], dat: ['Privacy', 'Datenschutz'],
+    hint: ['Esc closes · ← → chapters', 'Esc schließt · ← → Kapitel'], open: ['Show me →', 'Zeig mal →'],
+  };
+  // ---------------------------------------------------------------- Seiten und Kapitel
+  const P = [
+    { id: 'looper', ic: '◎', c: '#34c759', t: ['Looper', 'Looper'], d: ['Loopers as rings – record, overdub, stop, fade', 'Looper als Ringe – aufnehmen, Overdub, stoppen, blenden'],
+      one: ['Every looper in your set at a glance – and in your hand.', 'Jeder Looper im Set auf einen Blick – und unter der Hand.'],
+      ch: [['Rings tell you everything', 'Ringe sagen alles', 'Green plays, red records, blue overdubs – the dot runs with the loop.', 'Grün spielt, Rot nimmt auf, Blau overdubbt – der Punkt läuft mit dem Loop.'],
+        ['Tap instead of searching', 'Antippen statt suchen', 'Tap a ring: record, play, overdub. Stop waits for the loop end.', 'Ring antippen: aufnehmen, abspielen, overdubben. Stop wartet aufs Loop-Ende.'],
+        ['Fade and save', 'Blenden und speichern', 'Fade all loopers in or out – or save a loop as a clip in the session.', 'Alle Looper ein- und ausblenden – oder einen Loop als Clip in die Session speichern.'],
+        ['Hands free', 'Hände frei', 'nanoKONTROL2 and SPD-SX PRO drive the same loopers – no MIDI mapping.', 'nanoKONTROL2 und SPD-SX PRO bedienen dieselben Looper – ohne MIDI-Mapping.']] },
+    { id: 'clips', ic: '▦', c: '#0a84ff', t: ['Clips', 'Clips'], d: ['Session View, MC6 Pro, recording range and setlist', 'Session-Ansicht, MC6 Pro, Aufnahme-Bereich und Setlist'],
+      one: ['The whole Session View – recorded and launched by foot.', 'Die ganze Session-Ansicht – per Fuß aufgenommen und gestartet.'],
+      ch: [['The whole session', 'Die ganze Session', 'Every track and scene with clip names, live on every tablet.', 'Alle Spuren und Szenen mit Clipnamen, live auf jedem Tablet.'],
+        ['Recording range › … ‹', 'Aufnahme-Bereich › … ‹', 'Mark the tracks you record into – fades and faders follow the range.', 'Markiere die Spuren, in die du aufnimmst – Fades und Fader folgen dem Bereich.'],
+        ['MC6 Pro by foot', 'MC6 Pro per Fuß', 'Record, play, next scene – the MC6 shows track and scene on its display.', 'Aufnehmen, abspielen, nächste Szene – das MC6 zeigt Spur und Szene im Display.'],
+        ['Tempo per scene', 'Tempo je Szene', '“Chorus {140}” – the scene sets the tempo when it starts.', '„Chorus {140}“ – die Szene setzt beim Start das Tempo.']] },
+    { id: 'songs', ic: '☰', c: '#ff9f0a', t: ['Songs', 'Songs'], d: ['Setlist and sections – jump, loop, stop after song', 'Setlist und Abschnitte – springen, loopen, nach dem Song stoppen'],
+      one: ['Your set list, straight from the Live set.', 'Deine Setlist, direkt aus dem Live-Set.'],
+      ch: [['Setlist from locators', 'Setlist aus Locators', 'Songs and sections come from locators or scenes – reorder by drag.', 'Songs und Abschnitte kommen aus Locators oder Szenen – sortieren per Ziehen.'],
+        ['Sections as big buttons', 'Abschnitte als große Tasten', 'Tap: jump there, quantized. Hold: play from there.', 'Tippen: quantisiert hinspringen. Halten: von dort spielen.'],
+        ['Loop it, stop after', 'Loopen, danach stoppen', 'Loop a section until you move on – or stop at the end of the song.', 'Einen Abschnitt loopen, bis du weiterschaltest – oder am Songende stoppen.'],
+        ['Tempo from the name', 'Tempo aus dem Namen', '“Rehab 145bpm” – StageCase sets the tempo when the song starts.', '„Rehab 145bpm“ – StageCase setzt das Tempo, wenn der Song beginnt.']] },
+    { id: 'leadsheet', ic: '♪', c: '#ffd60a', t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard and notes', 'Text mit Akkorden, Griffbrett und Noten'],
+      one: ['The current song as a sheet that reads along.', 'Der aktuelle Song als Blatt, das mitliest.'],
+      ch: [['Reads along', 'Liest mit', 'The line being played is highlighted – tap a line to jump there.', 'Die gespielte Zeile ist hinterlegt – Tipp auf eine Zeile springt hin.'],
+        ['Chords and transposing', 'Akkorde und Transponieren', 'Chords from the lyrics or a +Chords track – ♭ ♯ moves them per song.', 'Akkorde aus dem Text oder einer +Chords-Spur – ♭ ♯ verschiebt sie je Song.'],
+        ['Fretboard', 'Griffbrett', 'Now, next, then – the shape flashes when the chord changes.', 'Jetzt, danach, dann – der Griff blitzt beim Wechsel auf.'],
+        ['Notes for your instrument', 'Noten fürs Instrument', 'A +NOTES track becomes sheet music, three bars ahead.', 'Eine +NOTES-Spur wird zu Noten, drei Takte voraus.']] },
+    { id: 'mixer', ic: '🎚', c: '#bf5af2', t: ['Mixer', 'Mixer'], d: ['Faders, mute, guide tracks and presets', 'Fader, Stumm, Guide-Spuren und Presets'],
+      one: ['Just the faders you need on stage.', 'Nur die Fader, die du auf der Bühne brauchst.'],
+      ch: [['Faders for +G: tracks', 'Fader für +G:-Spuren', 'Mark tracks with “+G:” and they appear here – on every device.', 'Spuren mit „+G:“ markieren, schon stehen sie hier – auf jedem Gerät.'],
+        ['Mute buttons on top', 'Stumm-Tasten oben', 'Pin up to four mute buttons into the top bar of every page.', 'Bis zu vier Stumm-Tasten in die obere Leiste jeder Seite heften.'],
+        ['Guide tracks', 'Guide-Spuren', '+GUIDE tracks mute and unmute themselves with the arrangement.', '+GUIDE-Spuren schalten sich mit dem Arrangement selbst stumm und an.'],
+        ['Mixer presets', 'Mixer-Presets', 'One tap and every fader goes to its place.', 'Ein Tipp, und jeder Fader fährt an seinen Platz.']] },
+    { id: 'mapping', ic: '🔌', c: '#64d2ff', t: ['Audio interface', 'Soundkarte'], d: ['Routing map, channel names and presets', 'Routing-Map, Kanalnamen und Presets'],
+      one: ['See your whole routing – and switch it per interface.', 'Das ganze Routing sehen – und je Soundkarte umschalten.'],
+      ch: [['Routing as a map', 'Routing als Map', 'Inputs, tracks, returns and outputs as boxes and lines.', 'Eingänge, Spuren, Returns und Ausgänge als Boxen und Linien.'],
+        ['Presets per interface', 'Presets je Soundkarte', 'Rehearsal room, club, festival – each interface gets its routing.', 'Proberaum, Club, Festival – jede Soundkarte bekommt ihr Routing.'],
+        ['Compare, then apply', 'Vergleichen, dann anwenden', 'StageCase shows what would change – yellow – before it touches Live.', 'StageCase zeigt gelb, was sich ändern würde – bevor es Live anfasst.'],
+        ['Arrange freely', 'Frei anordnen', 'Drag boxes into place – V, Ctrl or ⌥ – saved in the set.', 'Boxen an ihren Platz ziehen – V, Ctrl oder ⌥ – im Set gespeichert.']] },
+    { id: 'midi', ic: '🎹', c: '#ff375f', t: ['MIDI mapping', 'MIDI-Zuordnung'], d: ['Put the top bar on your controller', 'Die obere Leiste auf deinen Controller legen'],
+      one: ['Any button in StageCase on any key of your controller.', 'Jede Taste in StageCase auf jede Taste deines Controllers.'],
+      ch: [['Click a button', 'Taste anklicken', 'Play, stop, tap tempo, fades, mute – everything is learnable.', 'Play, Stop, Tap-Tempo, Fades, Stumm – alles lernbar.'],
+        ['Press a key', 'Taste drücken', 'Press any note or CC on your controller – done.', 'Eine Note oder einen CC am Controller drücken – fertig.'],
+        ['Songs and sections too', 'Auch Songs und Abschnitte', 'Put a song or a section on a pad and jump there.', 'Einen Song oder Abschnitt auf ein Pad legen und hinspringen.'],
+        ['One connection', 'Ein Anschluss', 'All controllers reach Live through the “Stagecase” port.', 'Alle Controller kommen über den Anschluss „Stagecase“ in Live an.']] },
+    { id: 'help', ic: '❓', c: '#8e8e93', t: ['Help', 'Hilfe'], d: ['Setup, every page, search', 'Einrichtung, alle Seiten, Suche'],
+      one: ['Built in – and it knows where you are.', 'Eingebaut – und sie weiß, wo du gerade bist.'],
+      ch: [['Search', 'Suche', 'Type a word, get the right section.', 'Ein Wort tippen, den passenden Abschnitt finden.'],
+        ['Opens where you are', 'Öffnet, wo du bist', 'Help jumps to the part about the page and button you used last.', 'Die Hilfe springt zum Teil über die zuletzt benutzte Seite und Taste.'],
+        ['English and German', 'Deutsch und Englisch', 'Every page, every help text – both languages.', 'Jede Seite, jeder Hilfetext – in beiden Sprachen.'],
+        ['Tab: back to start', 'Tab: zurück zum Start', 'The Tab key brings you to the start page and back.', 'Die Tab-Taste bringt dich zur Startseite und zurück.']] },
+  ];
+  // ---------------------------------------------------------------- Sprache
+  let de = true;
+  try { de = (localStorage.getItem('sc-lang') || ((navigator.language || 'de').startsWith('de') ? 'de' : 'en')) === 'de'; } catch (_) {}
+  const L = (pair) => pair[de ? 1 : 0];
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function texts() {
+    document.documentElement.lang = de ? 'de' : 'en';
+    for (const el of document.querySelectorAll('[data-t]')) el.textContent = L(TX[el.dataset.t]);
+    for (const b of document.querySelectorAll('.lang button')) b.classList.toggle('on', (b.dataset.l === 'de') === de);
+    $('tiles').innerHTML = P.map((p, i) => {
+      const col = i % 4, row = Math.floor(i / 4), side = col < 2 ? -1 : 1;
+      return `<button type="button" class="tile" data-i="${i}" style="--c:${p.c};--fx:${side * (col === 0 || col === 3 ? 38 : 26)}vw;--fy:${row ? 22 : -10}vh;--fr:${side * (row ? 8 : -6)}deg;transition-delay:${0.1 + i * 0.07}s">
+        <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span><em class="go">${esc(L(TX.open))}</em></button>`;
+    }).join('');
+    $('hint').textContent = L(TX.hint);
+    if (shownTiles) $('tiles').classList.add('in');
+    if (cur >= 0) show(cur, step, true);
+  }
+  for (const b of document.querySelectorAll('.lang button')) b.addEventListener('click', () => { de = b.dataset.l === 'de'; try { localStorage.setItem('sc-lang', b.dataset.l); } catch (_) {} texts(); });
+
+  // ---------------------------------------------------------------- Szenen (gezeichnete Vorfuehrung je Seite)
+  const ring = (st, n, sel, name) => `<div class="ring ${st}${sel ? ' sel' : ''}"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="40"/><circle class="pr" cx="50" cy="50" r="40"/><circle class="in" cx="50" cy="50" r="33"/></svg><div class="lb"><div>${n}<small>${name}</small></div></div></div>`;
+  const SC = {
+    looper: {
+      html: () => `<div class="lp" id="lp"></div><div class="clipcard" id="clipcard">💾 LOOPER 2 → Clip</div><div class="ctrl" id="ctrl"><i></i><i></i><i></i><i></i></div><div class="tap" id="tap"></div>`,
+      step(s) {
+        const st = [['play', 'rec', 'dub', 'stop'], ['play', 'stop', 'dub', 'stop'], ['play', 'play', 'dub', 'stop'], ['play', 'play', 'dub', 'rec']][s];
+        const names = ['DRUMS', 'BASS', 'KEYS', 'VOX'];
+        $('lp').innerHTML = st.map((x, i) => ring(x, i + 1, s === 3 && i === 3, names[i])).join('');
+        $('scn').classList.toggle('faded', false);
+        $('ctrl').classList.toggle('show', s === 3);
+        if (s === 1) later(900, () => { tapAt('lp', 1); later(350, () => { const r = $('lp').children[1]; r.className = 'ring rec'; }); });
+        if (s === 2) { later(500, () => $('scn').classList.add('faded')); later(1500, () => { $('scn').classList.remove('faded'); $('clipcard').classList.add('go'); }); }
+        else $('clipcard').classList.remove('go');
+        if (s === 3) later(700, () => { $('ctrl').children[3].classList.add('hot'); });
+      } },
+    clips: {
+      html: () => {
+        const tr = ['DRUMS', 'BASS', '› GTR', 'KEYS', 'VOX ‹', 'PADS', 'FX'];
+        const sc = [['Intro', ''], ['Verse', '{96}'], ['Chorus', '{140}'], ['Bridge', ''], ['Outro', '']];
+        const fill = (r, c) => ((r * 7 + c * 3) % 5 === 0 || (c < 2 && r < 3)) ? 'f' : '';
+        return `<div class="grid" id="grid"><div></div>${tr.map((t, i) => `<div class="h${i >= 2 && i <= 4 ? ' in' : ''}">${t}</div>`).join('')}
+          ${sc.map((s, r) => `<div class="sc">${s[0]}${s[1] ? `<em>♩ ${s[1].slice(1, -1)}</em>` : ''}</div>${tr.map((_, c) => `<div class="c ${fill(r, c)}" data-r="${r}" data-c="${c}"></div>`).join('')}`).join('')}</div>
+          <div class="mc6" id="mc6">${'DEF'.split('').concat('ABC'.split('')).map((k) => `<i>${k}</i>`).join('')}</div>`;
+      },
+      step(s) {
+        const scn = $('scn'); scn.classList.toggle('range', s >= 1); scn.classList.toggle('foot', s === 2); scn.classList.toggle('tempo', s === 3);
+        const cell = (r, c) => $('grid').querySelector(`.c[data-r="${r}"][data-c="${c}"]`);
+        for (const el of $('grid').querySelectorAll('.c')) el.classList.remove('p', 'r');
+        [[0, 0], [0, 1]].forEach(([r, c]) => cell(r, c).classList.add('p'));
+        if (s === 2) { const k = $('mc6').children[3]; later(500, () => { k.classList.add('hot'); cell(1, 2).classList.add('r'); }); later(1200, () => k.classList.remove('hot')); later(2400, () => { const k2 = $('mc6').children[3]; k2.classList.add('hot'); cell(1, 2).classList.remove('r'); cell(1, 2).classList.add('p', 'f'); later(400, () => k2.classList.remove('hot')); }); }
+        if (s === 3) later(700, () => { for (let c = 0; c < 7; c++) { const e = cell(2, c); if (e.classList.contains('f') || c < 3) { e.classList.add('f', 'p'); } } [0, 1].forEach((c) => cell(0, c).classList.remove('p')); });
+      } },
+    songs: {
+      html: () => `<div class="songs"><div class="sl" id="sl">${[['Opener', '3:40', '#ff375f'], ['Rehab', '3:35', '#ff9f0a'], ['Sundown', '4:10', '#34c759'], ['Valley Road', '5:02', '#0a84ff'], ['Encore', '2:58', '#bf5af2']].map((x, i) => `<div style="--sc:${x[2]}"${i === 1 ? ' class="cur"' : ''}><span>${i + 1} ${x[0]}</span><small>${x[1]}</small></div>`).join('')}</div>
+        <div class="cs"><div class="tt">Rehab<small>· <span class="bpm" id="bpm">♩ 145</span></small></div><div class="prog"><i id="prog"></i></div>
+        <div class="secs" id="secs">${[['Intro', '#8e8e93'], ['Verse', '#34c759'], ['Chorus', '#ff3b30'], ['Verse 2', '#34c759'], ['Solo', '#ff9f0a'], ['Outro', '#8e8e93']].map((x) => `<div style="--sc:${x[1]}">${x[0]}</div>`).join('')}</div>
+        <div class="stopb" id="stopb">■ Stop after song</div></div></div><div class="tap" id="tap"></div>`,
+      step(s) {
+        const secs = $('secs').children; for (const e of secs) e.classList.remove('cur', 'loop');
+        secs[s === 0 ? 0 : s === 1 ? 2 : s === 2 ? 4 : 1].classList.add('cur');
+        $('stopb').classList.toggle('on', s === 2); $('prog').style.width = ['12%', '42%', '68%', '8%'][s];
+        if (s === 0) later(800, () => { const sl = $('sl').children; sl[1].classList.remove('cur'); sl[2].classList.add('cur'); later(1200, () => { sl[2].classList.remove('cur'); sl[1].classList.add('cur'); }); });
+        if (s === 1) later(700, () => tapAt('secs', 2));
+        if (s === 2) later(600, () => secs[4].classList.add('loop'));
+        if (s === 3) later(900, () => { $('bpm').textContent = '♩ 120'; $('bpm').classList.add('pop'); later(300, () => $('bpm').classList.remove('pop')); later(1400, () => { $('bpm').textContent = '♩ 145'; }); });
+      } },
+    leadsheet: {
+      html: () => `<div class="ls"><div class="paper" id="paper"><h4>Sundown</h4><div class="sec">VERSE 1</div>
+        ${[['Em G D A', 'Lights go down and the room is ready'], ['Em G D A', 'hands on the sticks and the loop is steady'], ['C D Em', 'one more time around the line']].map((l, i) => `<div class="ln" data-i="${i}"><span class="ch">${l[0]}</span>${l[1]}</div>`).join('')}
+        <div class="sec">CHORUS</div><div class="ln" data-i="3"><span class="ch">C D G</span>and we are home</div></div>
+        <div class="side"><div class="trp">♭ <b id="trv">±0</b> ♯</div><div class="fb"><div class="n">Jetzt <b id="chn">Em</b></div><div class="frets" id="frets"><i style="left:30%;top:60%"></i><i style="left:30%;top:42%"></i></div></div>
+        <div class="staff" id="staff"><b></b>${[12, 26, 40, 54, 68, 82].map((x, i) => `<i style="left:${x}%;top:${[52, 44, 36, 44, 60, 40][i]}%"></i>`).join('')}</div></div></div>`,
+      step(s) {
+        const lines = $('paper').querySelectorAll('.ln'); lines.forEach((l) => l.classList.remove('cur'));
+        $('scn').classList.toggle('notes', s === 3);
+        const hl = (i) => { lines.forEach((l) => l.classList.remove('cur')); lines[i] && lines[i].classList.add('cur'); };
+        if (s === 0) { hl(0); later(1300, () => hl(1)); later(2600, () => hl(2)); }
+        if (s === 1) { hl(1); later(900, () => { $('trv').textContent = '+2'; for (const c of $('paper').querySelectorAll('.ch')) c.textContent = c.textContent.replace(/Em/g, 'F#m').replace(/\bG\b/g, 'A').replace(/\bD\b/g, 'E').replace(/\bA\b/g, 'B').replace(/\bC\b/g, 'D'); $('chn').textContent = 'F#m'; }); }
+        else { $('trv').textContent = '±0'; const orig = ['Em G D A', 'Em G D A', 'C D Em', 'C D G']; $('paper').querySelectorAll('.ch').forEach((c, i) => { c.textContent = orig[i]; }); $('chn').textContent = 'Em'; }
+        if (s === 2) { hl(2); const f = $('frets').children; const shapes = [['30%', '60%', '30%', '42%'], ['55%', '25%', '30%', '80%'], ['55%', '42%', '80%', '25%']]; let k = 0;
+          const go = () => { const sh = shapes[k % 3]; f[0].style.left = sh[0]; f[0].style.top = sh[1]; f[1].style.left = sh[2]; f[1].style.top = sh[3]; $('chn').textContent = ['Em', 'G', 'D'][k % 3]; k++; };
+          go(); later(1300, go); later(2600, go); }
+        if (s === 3) hl(3);
+      } },
+    mixer: {
+      html: () => `<div class="mx" id="mx">${[['DRUMS', '#ff9f0a', 30], ['BASS', '#34c759', 40], ['KEYS', '#0a84ff', 35], ['VOX', '#ff375f', 25], ['CLICK', '#8e8e93', 50], ['GUIDE', '#ffd60a', 45]].map((x, i) => `<div class="st${i === 5 ? ' guide' : ''}" style="--sc:${x[1]}"><div class="nm">${x[0]}</div><div class="tr"><div class="kn" style="top:${x[2]}%"></div></div><div class="mu">M</div></div>`).join('')}</div>
+        <div class="pre" id="pre"><i class="on">Probe</i><i>Gig</i><i>Festival</i></div>`,
+      step(s) {
+        const st = $('mx').children, kn = (i, v) => { st[i].querySelector('.kn').style.top = v + '%'; }, mu = (i, on) => st[i].querySelector('.mu').classList.toggle('on', on);
+        for (let i = 0; i < 6; i++) mu(i, false);
+        if (s === 0) { later(400, () => kn(0, 18)); later(900, () => kn(3, 45)); later(1600, () => kn(1, 28)); }
+        if (s === 1) { later(600, () => mu(4, true)); later(1600, () => mu(4, false)); later(2300, () => mu(4, true)); }
+        if (s === 2) { later(500, () => mu(5, true)); later(1800, () => mu(5, false)); }
+        if (s === 3) { const p = $('pre').children; later(700, () => { p[0].classList.remove('on'); p[1].classList.add('on'); [22, 30, 28, 18, 60, 70].forEach((v, i) => kn(i, v)); }); later(2300, () => { p[1].classList.remove('on'); p[2].classList.add('on'); [12, 20, 24, 10, 55, 80].forEach((v, i) => kn(i, v)); }); }
+      } },
+    mapping: {
+      html: () => `<div class="map" id="map"><div class="tabs" id="tabs"><i class="on">Babyface Pro</i><i>X32 Rack</i></div><div class="apply">✓ Anwenden</div>
+        <svg viewBox="0 0 100 62.5" preserveAspectRatio="none"><path d="M18 18 C30 18 30 14 40 14"/><path d="M18 30 C30 30 30 28 40 28"/><path d="M18 42 C30 42 30 42 40 42"/><path id="pd" d="M58 14 C70 14 70 24 80 24"/><path d="M58 28 C70 28 70 24 80 24"/><path d="M58 42 C70 42 70 46 80 46"/></svg>
+        ${[['in', 'In 1/2', 'Drums', 2, 22], ['in', 'In 3', 'Bass DI', 2, 42], ['in', 'In 4', 'Vocal', 2, 62], ['tr', 'DRUMS', 'Spur', 40, 16], ['tr', 'BASS', 'Spur', 40, 38], ['tr', 'VOX', 'Spur', 40, 60], ['out', 'Out 1/2', 'Main', 78, 32], ['out', 'Out 3/4', 'In-Ear', 78, 66]]
+          .map((b, i) => `<div class="bx ${b[0]}" data-i="${i}" style="left:${b[3]}%;top:${b[4]}%">${b[1]}<small>${b[2]}</small></div>`).join('')}</div>`,
+      step(s) {
+        const scn = $('scn'); scn.classList.remove('draw', 'cmp'); void scn.offsetWidth;
+        const bx = $('map').querySelectorAll('.bx'); bx.forEach((b) => b.classList.remove('diff')); $('pd').classList.remove('d');
+        const tabs = $('tabs').children; tabs[0].classList.toggle('on', s !== 1); tabs[1].classList.toggle('on', s === 1);
+        later(100, () => scn.classList.add('draw'));
+        if (s === 2) later(800, () => { scn.classList.add('cmp'); bx[6].classList.add('diff'); bx[3].classList.add('diff'); $('pd').classList.add('d'); });
+        if (s === 3) { later(700, () => { bx[6].style.top = '12%'; bx[3].style.left = '44%'; }); later(2200, () => { bx[6].style.top = '32%'; bx[3].style.left = '40%'; }); }
+      } },
+    midi: {
+      html: () => `<div class="mm"><div class="keys" id="keys">${['▶ / ■', '● REC', '⟲ LOOP', 'TAP', '◢ Fade In', '◣ Fade Out', 'Song: Rehab'].map((k) => `<i>${k}<span class="tag"></span></i>`).join('')}</div>
+        <div class="dev"><div class="k" id="kk">${'12345678'.split('').map(() => '<i></i>').join('')}</div><span id="kt"></span></div>
+        <div class="hub"><span>nanoKONTROL2</span><span>MC6 Pro</span><span>SPD-SX PRO</span><span class="ar">→</span><span><b>Stagecase</b></span><span class="ar">→</span><span>Ableton Live</span></div></div>`,
+      step(s) {
+        const k = $('keys').children, kk = $('kk').children;
+        for (const e of k) e.classList.remove('wait', 'ok'); for (const e of kk) e.classList.remove('hot');
+        $('scn').classList.toggle('port', s === 3); $('kt').textContent = '';
+        const learn = (i, key, tag) => { k[i].classList.add('wait'); later(1200, () => { kk[key].classList.add('hot'); k[i].classList.remove('wait'); k[i].classList.add('ok'); k[i].querySelector('.tag').textContent = tag; $('kt').textContent = tag; }); later(1700, () => kk[key].classList.remove('hot')); };
+        if (s === 0) later(300, () => k[0].classList.add('wait'));
+        if (s === 1) learn(0, 2, 'Note 38 · Kanal 1');
+        if (s === 2) learn(6, 5, 'Note 43 · Kanal 1');
+      } },
+    help: {
+      html: () => `<div class="hp"><div class="search" id="q"></div><div class="res" id="res">${[['<b>Looper</b>-Seite · Die Ringe', 1], ['<b>Looper</b> aus dem Arrangement steuern', 0], ['Clips · Reiter <b>Looper</b>', 0]].map((r) => `<div${r[1] ? ' data-hit="1"' : ''}>${r[0]}</div>`).join('')}</div><div class="tabkey" id="tabk">⇥ Tab</div></div>`,
+      step(s) {
+        const res = $('res').children; for (const r of res) r.classList.remove('show', 'hit'); $('tabk').classList.remove('show', 'down'); $('q').textContent = '';
+        if (s === 0 || s === 1) { const w = 'Looper'; for (let i = 1; i <= w.length; i++) later(150 * i, () => { $('q').textContent = w.slice(0, i); }); later(1100, () => { for (const r of res) r.classList.add('show'); }); }
+        if (s === 1) later(1900, () => res[0].classList.add('hit'));
+        if (s === 2) { $('q').textContent = 'Setlist'; later(400, () => { res[0].innerHTML = '<b>Setlist</b> – Songs-Seite'; res[0].classList.add('show'); }); later(1700, () => { res[0].innerHTML = '<b>Setlist</b> – Songs page'; }); }
+        else { res[0].innerHTML = '<b>Looper</b>-Seite · Die Ringe'; }
+        if (s === 3) { $('tabk').classList.add('show'); later(900, () => $('tabk').classList.add('down')); later(1200, () => $('tabk').classList.remove('down')); }
+      } },
+  };
+  // ---------------------------------------------------------------- Buehne
+  let cur = -1, step = 0, timers = [], auto = true, adv = 0;
+  const DUR = 4200;
+  const later = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
+  const clearT = () => { timers.forEach(clearTimeout); timers = []; clearTimeout(adv); };
+  function tapAt(parentId, i) {
+    const t = $('tap'), el = $(parentId).children[i]; if (!t || !el) return;
+    const s = $('screen').getBoundingClientRect(), r = el.getBoundingClientRect();
+    t.style.left = (r.left - s.left + r.width / 2 - 8) + 'px'; t.style.top = (r.top - s.top + r.height / 2 - 8) + 'px';
+    t.classList.remove('go'); void t.offsetWidth; t.classList.add('go');
+  }
+  function show(i, s, keep) {
+    const p = P[i], first = cur !== i || !keep;
+    clearT(); cur = i; step = s;
+    const stage = $('stage'); stage.style.setProperty('--c', p.c); stage.querySelector('.sbox').style.setProperty('--c', p.c);
+    $('sIc').textContent = p.ic; $('sTitle').textContent = L(p.t); $('sOne').textContent = L(p.one);
+    $('tbNav').innerHTML = P.slice(0, 6).map((x) => (x.id === p.id ? `<b>${esc(L(x.t))}</b>` : esc(L(x.t)))).join(' · ');
+    $('chap').innerHTML = p.ch.map((c, k) => `<li data-k="${k}"${k === s ? ' class="on"' : ''} style="--dur:${DUR}ms"><b>${esc(de ? c[1] : c[0])}</b><span>${esc(de ? c[3] : c[2])}</span><i class="bar"></i></li>`).join('');
+    const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
+    const cap = $('cap'); cap.classList.remove('show'); cap.textContent = de ? p.ch[s][1] : p.ch[s][0]; later(60, () => cap.classList.add('show'));
+    SC[p.id].step(s);
+    $('play').textContent = auto ? '❚❚' : '▶'; $('stage').classList.toggle('paused', !auto);
+    if (auto) adv = setTimeout(() => show(i, (step + 1) % p.ch.length, true), DUR);
+  }
+  function openStage(i) {
+    auto = true; $('stage').classList.add('open'); $('stage').setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
+    show(i, 0, false);
+  }
+  function closeStage() { clearT(); cur = -1; $('stage').classList.remove('open'); $('stage').setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+  $('tiles').addEventListener('click', (e) => { const t = e.target.closest('.tile'); if (t) openStage(Number(t.dataset.i)); });
+  $('chap').addEventListener('click', (e) => { const li = e.target.closest('li'); if (li) show(cur, Number(li.dataset.k), true); });
+  $('close').addEventListener('click', closeStage);
+  $('stage').addEventListener('click', (e) => { if (e.target === $('stage')) closeStage(); });
+  $('prev').addEventListener('click', () => show(cur, (step + P[cur].ch.length - 1) % P[cur].ch.length, true));
+  $('next').addEventListener('click', () => show(cur, (step + 1) % P[cur].ch.length, true));
+  $('play').addEventListener('click', () => { auto = !auto; show(cur, step, true); });
+  addEventListener('keydown', (e) => {
+    if (cur < 0) { const n = Number(e.key); if (n >= 1 && n <= P.length) openStage(n - 1); return; }
+    if (e.key === 'Escape') closeStage();
+    else if (e.key === 'ArrowRight') $('next').click();
+    else if (e.key === 'ArrowLeft') $('prev').click();
+    else if (e.key === 'Tab') { e.preventDefault(); show((cur + (e.shiftKey ? P.length - 1 : 1)) % P.length, 0, false); }
+  });
+  // ---------------------------------------------------------------- Einflug beim Scrollen
+  let shownTiles = false;
+  texts();
+  const io = new IntersectionObserver((es) => { for (const en of es) if (en.isIntersecting) {
+    if (en.target.id === 'tiles') { shownTiles = true; en.target.classList.add('in'); for (const t of en.target.children) t.addEventListener('transitionend', () => { t.style.transitionDelay = '0s'; }, { once: true }); }
+    else en.target.classList.add('in');
+    io.unobserve(en.target); } }, { threshold: .15 });
+  io.observe($('tiles')); document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  if (location.hash && location.hash.length > 1) { const i = P.findIndex((p) => p.id === location.hash.slice(1)); if (i >= 0) setTimeout(() => openStage(i), 600); }
+})();
+</script>
+</body>
+</html>
