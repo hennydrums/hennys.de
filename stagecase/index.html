@@ -84,6 +84,18 @@
   .paused .chap li.on .bar { animation-play-state: paused; }
   @keyframes bar { to { width: 100%; } }
   .nav { display: flex; gap: 8px; margin-top: 14px; align-items: center; color: var(--faint); font-size: 12px; }
+  /* alle Bereiche oben im Rundgang: direkt hin- und herspringen */
+  .pages { grid-column: 1 / -1; display: flex; gap: 6px; overflow-x: auto; padding: 0 30px 4px 0; margin-bottom: -6px; scrollbar-width: none; }
+  .pages::-webkit-scrollbar { display: none; }
+  .pages button { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid var(--line);
+    background: var(--card); color: var(--dim); font: 600 13px inherit; cursor: pointer; white-space: nowrap; transition: all .2s; }
+  .pages button .pi { font-size: 15px; line-height: 1; }
+  .pages button:hover { color: var(--fg); border-color: var(--pc); }
+  .pages button.on { color: #0b0b0d; background: var(--pc); border-color: var(--pc); }
+  .pgnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; }
+  .pgnav button { flex: 1; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 700 13px inherit; cursor: pointer; }
+  .pgnav button:hover { border-color: var(--c); }
+  .pgnav #pgNext { text-align: right; padding-right: 14px; } .pgnav #pgPrev { text-align: left; padding-left: 14px; }
   .nav button { height: 34px; min-width: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; font-weight: 700; }
   .nav .sp { flex: 1; }
 
@@ -296,6 +308,7 @@
 <div class="stage" id="stage" aria-hidden="true">
   <div class="sbox" role="dialog" aria-modal="true">
     <button type="button" class="close" id="close" aria-label="close">✕</button>
+    <nav class="pages" id="pages"></nav>
     <div>
       <div class="screen" id="screen"><div class="tb"><i></i><span id="tbNav"></span><span class="sp"></span><span class="live">Live</span><b>StageCase</b></div><div id="scn"></div><div class="cap" id="cap"></div></div>
     </div>
@@ -304,6 +317,7 @@
       <p class="one" id="sOne"></p>
       <ol class="chap" id="chap"></ol>
       <div class="nav"><button type="button" id="prev">‹</button><button type="button" id="play">❚❚</button><button type="button" id="next">›</button><span class="sp"></span><span id="hint"></span></div>
+      <div class="pgnav"><button type="button" id="pgPrev"></button><button type="button" id="pgNext"></button></div>
     </div>
   </div>
 </div>
@@ -332,7 +346,7 @@
     endH: ['Want to try it?', 'Lust auszuprobieren?'], endP: ['StageCase is in beta. Drop me a line and you’ll get an invitation.', 'StageCase ist in der Beta. Schreib mir kurz, dann bekommst du eine Einladung.'],
     tm: ['Ableton and Live are trademarks of Ableton AG. StageCase is not a product of Ableton.', 'Ableton und Live sind Marken der Ableton AG. StageCase ist kein Produkt von Ableton.'],
     imp: ['Imprint', 'Impressum'], dat: ['Privacy', 'Datenschutz'],
-    hint: ['Esc closes · ← → chapters', 'Esc schließt · ← → Kapitel'], soon: ['Soon · in planning', 'Bald · in Planung'], open: ['Show me →', 'Zeig mal →'],
+    hint: ['Esc closes · ← → step by step · Tab next area', 'Esc schließt · ← → Schritt für Schritt · Tab nächster Bereich'], soon: ['Soon · in planning', 'Bald · in Planung'], open: ['Show me →', 'Zeig mal →'],
   };
   // ---------------------------------------------------------------- Seiten und Kapitel
   const XLR = '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#2c2c33" stroke="#c9ced4" stroke-width="3"/><circle cx="32" cy="32" r="16" fill="#18181c"/><circle cx="25" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="39" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="32" cy="40" r="3.2" fill="#e7e9ec"/><path d="M28 12 h8 v4 h-8 z" fill="#c9ced4"/></svg>';   // XLR-Buchse fuer die Soundkarte
@@ -549,8 +563,16 @@
     const cap = $('cap'); cap.classList.remove('show'); cap.textContent = de ? p.ch[s][1] : p.ch[s][0]; later(60, () => cap.classList.add('show'));
     SC[p.id].step(s);
     $('play').textContent = auto ? '❚❚' : '▶'; $('stage').classList.toggle('paused', !auto);
-    if (auto) adv = setTimeout(() => show(i, (step + 1) % p.ch.length, true), DUR);
+    // Bereiche oben und Weiter/Zurueck zum naechsten Bereich
+    $('pages').innerHTML = P.map((x, k) => `<button type="button" data-p="${k}" class="${k === i ? 'on' : ''}" style="--pc:${x.c}"><span class="pi">${x.ic}</span>${esc(L(x.t))}</button>`).join('');
+    const pb = $('pages').querySelector('.on'); if (pb && first) pb.scrollIntoView({ block: 'nearest', inline: 'center' });
+    const pv = P[(i + P.length - 1) % P.length], nx = P[(i + 1) % P.length];
+    $('pgPrev').innerHTML = `‹ ${esc(L(pv.t))}`; $('pgNext').innerHTML = `${esc(L(nx.t))} ›`;
+    // automatisch: nach dem letzten Kapitel in den naechsten Bereich -- ein durchgehender Rundgang
+    if (auto) adv = setTimeout(() => (step + 1 < p.ch.length ? show(i, step + 1, true) : show((i + 1) % P.length, 0, false)), DUR);
   }
+  const fwd = () => (step + 1 < P[cur].ch.length ? show(cur, step + 1, true) : show((cur + 1) % P.length, 0, false));
+  const back = () => (step > 0 ? show(cur, step - 1, true) : (() => { const k = (cur + P.length - 1) % P.length; show(k, P[k].ch.length - 1, false); })());
   function openStage(i) {
     auto = true; $('stage').classList.add('open'); $('stage').setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
     show(i, 0, false);
@@ -560,8 +582,13 @@
   $('chap').addEventListener('click', (e) => { const li = e.target.closest('li'); if (li) show(cur, Number(li.dataset.k), true); });
   $('close').addEventListener('click', closeStage);
   $('stage').addEventListener('click', (e) => { if (e.target === $('stage')) closeStage(); });
-  $('prev').addEventListener('click', () => show(cur, (step + P[cur].ch.length - 1) % P[cur].ch.length, true));
-  $('next').addEventListener('click', () => show(cur, (step + 1) % P[cur].ch.length, true));
+  $('prev').addEventListener('click', back);
+  $('next').addEventListener('click', fwd);
+  $('pgPrev').addEventListener('click', () => show((cur + P.length - 1) % P.length, 0, false));
+  $('pgNext').addEventListener('click', () => show((cur + 1) % P.length, 0, false));
+  $('pages').addEventListener('click', (e) => { const b = e.target.closest('[data-p]'); if (b) show(Number(b.dataset.p), 0, false); });
+  // „Rundgang starten“: gleich beim ersten Bereich los
+  document.querySelector('[data-t="cta1"]').addEventListener('click', (e) => { e.preventDefault(); openStage(0); });
   $('play').addEventListener('click', () => { auto = !auto; show(cur, step, true); });
   addEventListener('keydown', (e) => {
     if (cur < 0) { const n = Number(e.key); if (n >= 1 && n <= P.length) openStage(n - 1); return; }
