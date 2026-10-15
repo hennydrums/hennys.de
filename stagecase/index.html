@@ -332,6 +332,7 @@
     hint: ['Esc closes · ← → chapters', 'Esc schließt · ← → Kapitel'], open: ['Show me →', 'Zeig mal →'],
   };
   // ---------------------------------------------------------------- Seiten und Kapitel
+  const XLR = '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#2c2c33" stroke="#c9ced4" stroke-width="3"/><circle cx="32" cy="32" r="16" fill="#18181c"/><circle cx="25" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="39" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="32" cy="40" r="3.2" fill="#e7e9ec"/><path d="M28 12 h8 v4 h-8 z" fill="#c9ced4"/></svg>';   // XLR-Buchse fuer die Soundkarte
   const P = [
     { id: 'looper', ic: '◎', c: '#34c759', t: ['Looper', 'Looper'], d: ['Loopers as rings – record, overdub, stop, fade', 'Looper als Ringe – aufnehmen, Overdub, stoppen, blenden'],
       one: ['Every looper in your set at a glance – and in your hand.', 'Jeder Looper im Set auf einen Blick – und unter der Hand.'],
@@ -363,7 +364,7 @@
         ['Mute buttons on top', 'Stumm-Tasten oben', 'Pin up to four mute buttons into the top bar of every page.', 'Bis zu vier Stumm-Tasten in die obere Leiste jeder Seite heften.'],
         ['Guide tracks', 'Guide-Spuren', '+GUIDE tracks mute and unmute themselves with the arrangement.', '+GUIDE-Spuren schalten sich mit dem Arrangement selbst stumm und an.'],
         ['Mixer presets', 'Mixer-Presets', 'One tap and every fader goes to its place.', 'Ein Tipp, und jeder Fader fährt an seinen Platz.']] },
-    { id: 'mapping', ic: '🔌', c: '#64d2ff', t: ['Audio interface', 'Soundkarte'], d: ['Routing map, channel names and presets', 'Routing-Map, Kanalnamen und Presets'],
+    { id: 'mapping', ic: XLR, c: '#64d2ff', t: ['Audio interface', 'Soundkarte'], d: ['Routing map, channel names and presets', 'Routing-Map, Kanalnamen und Presets'],
       one: ['See your whole routing – and switch it per interface.', 'Das ganze Routing sehen – und je Soundkarte umschalten.'],
       ch: [['Routing as a map', 'Routing als Map', 'Inputs, tracks, returns and outputs as boxes and lines.', 'Eingänge, Spuren, Returns und Ausgänge als Boxen und Linien.'],
         ['Presets per interface', 'Presets je Soundkarte', 'Rehearsal room, club, festival – each interface gets its routing.', 'Proberaum, Club, Festival – jede Soundkarte bekommt ihr Routing.'],
@@ -531,7 +532,7 @@
     const p = P[i], first = cur !== i || !keep;
     clearT(); cur = i; step = s;
     const stage = $('stage'); stage.style.setProperty('--c', p.c); stage.querySelector('.sbox').style.setProperty('--c', p.c);
-    $('sIc').textContent = p.ic; $('sTitle').textContent = L(p.t); $('sOne').textContent = L(p.one);
+    $('sIc').innerHTML = p.ic; $('sTitle').textContent = L(p.t); $('sOne').textContent = L(p.one);
     $('tbNav').innerHTML = P.slice(0, 6).map((x) => (x.id === p.id ? `<b>${esc(L(x.t))}</b>` : esc(L(x.t)))).join(' · ');
     $('chap').innerHTML = p.ch.map((c, k) => `<li data-k="${k}"${k === s ? ' class="on"' : ''} style="--dur:${DUR}ms"><b>${esc(de ? c[1] : c[0])}</b><span>${esc(de ? c[3] : c[2])}</span><i class="bar"></i></li>`).join('');
     const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
