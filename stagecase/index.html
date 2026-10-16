@@ -189,6 +189,42 @@
   .trp { display: inline-flex; gap: .6cqw; align-items: center; font-size: 1.5cqw; color: #9a9aa4; }
   .trp i { font-style: normal; border: 1px solid #444; border-radius: .6cqw; padding: .2cqw .8cqw; color: #fff; } .trp b { color: var(--warn); }
 
+  /* Vorschau-Hinweis (Lights) */
+  .tile .prev, .prev { position: absolute; top: 14px; right: 14px; font-size: 10.5px; font-style: normal; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: #0b0b0d; background: var(--warn); border-radius: 6px; padding: 2px 7px; }
+  #sTitle .prev { position: static; vertical-align: middle; margin-left: 8px; font-size: 11px; }
+
+  /* --- Szene Lights --- */
+  .lk { display: grid; grid-template-columns: 38% 1fr; gap: 2.4cqw; height: 100%; padding-bottom: 6cqw; }
+  .rig { position: relative; border-radius: 1.2cqw; background: linear-gradient(#08080a, #121216); overflow: hidden; border: 1px solid #1f1f24; }
+  .rig .truss { position: absolute; left: 6%; right: 6%; top: 7%; height: 1.4cqw; background: repeating-linear-gradient(90deg, #6b6b74 0 .3cqw, transparent .3cqw 1.4cqw), #2a2a30; border-radius: .3cqw; }
+  .rig .lamp { position: absolute; top: 7%; width: 3.6cqw; height: 3cqw; margin-left: -1.8cqw; border-radius: .5cqw; background: #3a3a42; }
+  .rig .beam { position: absolute; top: 15%; width: 16cqw; height: 78%; margin-left: -8cqw; transform-origin: 50% 0;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--lc, #fff) 85%, transparent), transparent 92%); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+    opacity: .1; transition: opacity .5s, background .5s; }
+  .rig.on .beam { opacity: .75; }
+  .rig.move .beam { animation: sway 2.2s ease-in-out infinite alternate; }
+  .rig.move .beam:nth-of-type(2n) { animation-direction: alternate-reverse; }
+  @keyframes sway { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+  .rig.strobe .beam { animation: strobe .16s steps(1) infinite; }
+  @keyframes strobe { 50% { opacity: 0; } }
+  .rig .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 18%; background: radial-gradient(60% 100% at 50% 100%, color-mix(in srgb, var(--lc, #fff) 30%, transparent), transparent); opacity: 0; transition: opacity .5s; }
+  .rig.on .floor { opacity: 1; }
+  .lkp { display: flex; flex-direction: column; gap: 1.4cqw; min-width: 0; }
+  .lktabs { display: flex; gap: .8cqw; } .lktabs i { font-style: normal; font-size: 1.3cqw; font-weight: 700; padding: .5cqw 1.2cqw; border-radius: .7cqw; background: #18181c; color: #8a8a92; border: 1px solid #26262c; }
+  .lktabs i.on { color: #fff; border-color: var(--warn); box-shadow: inset 0 -.3cqw 0 var(--warn); }
+  .cues { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9cqw; }
+  .cues i { font-style: normal; font-size: 1.3cqw; font-weight: 700; padding: 1.2cqw .9cqw 1.2cqw 1.4cqw; border-radius: .9cqw; color: #f2f2f2;
+    background: color-mix(in srgb, var(--q) 20%, #1b1b1f); box-shadow: inset .45cqw 0 0 var(--q); transition: all .3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cues i.on { background: var(--q); color: #0b0b0d; box-shadow: 0 0 0 .25cqw #fff, 0 0 2cqw color-mix(in srgb, var(--q) 70%, transparent); }
+  .lsecs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9cqw; margin-top: auto; }
+  .lsecs > div { position: relative; min-height: 6.4cqw; border-radius: .9cqw; background: #16161a; border: 1px solid #26262c; padding: .9cqw 1cqw; font-size: 1.35cqw; font-weight: 800; transition: all .3s; }
+  .lsecs > div.now { box-shadow: inset .5cqw 0 0 var(--play); }
+  .lsecs > div.arm { border-color: var(--warn); box-shadow: 0 0 0 .25cqw var(--warn); }
+  .lsecs .chips { display: flex; flex-wrap: wrap; gap: .4cqw; margin-top: .6cqw; }
+  .lsecs .chips span { font-size: 1.05cqw; font-weight: 700; padding: .25cqw .7cqw; border-radius: .5cqw; background: color-mix(in srgb, var(--q) 32%, #1b1b1f); box-shadow: inset .3cqw 0 0 var(--q); animation: chip .35s ease-out; }
+  @keyframes chip { from { transform: scale(.5); opacity: 0; } }
+
   /* --- Szene Mixer --- */
   .mx { display: flex; gap: 2cqw; height: 100%; align-items: stretch; padding-bottom: 6cqw; }
   .st { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1cqw; background: #16161a; border-radius: 1cqw; padding: 1.2cqw .6cqw; border-top: .5cqw solid var(--sc); }
@@ -346,7 +382,7 @@
     endH: ['Want to try it?', 'Lust auszuprobieren?'], endP: ['StageCase is in beta. Drop me a line and you’ll get an invitation.', 'StageCase ist in der Beta. Schreib mir kurz, dann bekommst du eine Einladung.'],
     tm: ['Ableton and Live are trademarks of Ableton AG. StageCase is not a product of Ableton.', 'Ableton und Live sind Marken der Ableton AG. StageCase ist kein Produkt von Ableton.'],
     imp: ['Imprint', 'Impressum'], dat: ['Privacy', 'Datenschutz'],
-    hint: ['Esc closes · ← → step by step · Tab next area', 'Esc schließt · ← → Schritt für Schritt · Tab nächster Bereich'], soon: ['Soon · in planning', 'Bald · in Planung'], open: ['Show me →', 'Zeig mal →'],
+    hint: ['Esc closes · ← → step by step · Tab next area', 'Esc schließt · ← → Schritt für Schritt · Tab nächster Bereich'], soon: ['Soon · in planning', 'Bald · in Planung'], pre: ['Preview', 'Vorschau'], open: ['Show me →', 'Zeig mal →'],
   };
   // ---------------------------------------------------------------- Seiten und Kapitel
   const XLR = '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#2c2c33" stroke="#c9ced4" stroke-width="3"/><circle cx="32" cy="32" r="16" fill="#18181c"/><circle cx="25" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="39" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="32" cy="40" r="3.2" fill="#e7e9ec"/><path d="M28 12 h8 v4 h-8 z" fill="#c9ced4"/></svg>';   // XLR-Buchse fuer die Soundkarte
@@ -393,6 +429,12 @@
         ['Press a key', 'Taste drücken', 'Press any note or CC on your controller – done.', 'Eine Note oder einen CC am Controller drücken – fertig.'],
         ['Songs and sections too', 'Auch Songs und Abschnitte', 'Put a song or a section on a pad and jump there.', 'Einen Song oder Abschnitt auf ein Pad legen und hinspringen.'],
         ['One connection', 'Ein Anschluss', 'All controllers reach Live through the “Stagecase” port.', 'Alle Controller kommen über den Anschluss „Stagecase“ in Live an.']] },
+    { id: 'lights', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a" stop-opacity=".95"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></linearGradient></defs><path d="M24 22 L8 60 H56 L40 22 Z" fill="url(#lb)"/><rect x="20" y="8" width="24" height="16" rx="4" fill="#3a3a42" stroke="#c9ced4" stroke-width="2"/><circle cx="32" cy="22" r="6" fill="#fff6c8"/><path d="M14 16 H20 M44 16 H50" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#ffd60a', pre: true, t: ['Lights', 'Lights'], d: ['Lightkey cues per section – they follow the song', 'Lightkey-Cues je Abschnitt – sie folgen dem Song'],
+      one: ['Your light show follows the song – no clips in Live needed.', 'Deine Lichtshow folgt dem Song – ohne Clips in Live.'],
+      ch: [['Lightkey cues as buttons', 'Lightkey-Cues als Tasten', 'Your Lightkey Live Triggers become pages and cue buttons in their clip colours.', 'Deine Lightkey Live Triggers werden zu Seiten und Cue-Tasten in ihren Clipfarben.'],
+        ['Light per section', 'Licht je Abschnitt', 'Tap a section, then a cue – saved in the Live set.', 'Abschnitt antippen, dann einen Cue – gespeichert im Live-Set.'],
+        ['Follows the song', 'Folgt dem Song', 'Verse, chorus, solo – the light switches with the section, even when you jump or loop.', 'Strophe, Refrain, Solo – das Licht schaltet mit dem Abschnitt, auch beim Springen und Loopen.'],
+        ['Several cues at once', 'Mehrere Cues zugleich', 'Colour, movement and effect from different pages – one section, one look.', 'Farbe, Bewegung und Effekt von verschiedenen Seiten – ein Abschnitt, ein Bild.']] },
     { id: 'help', ic: '❓', c: '#8e8e93', t: ['Help', 'Hilfe'], d: ['Setup, every page, search', 'Einrichtung, alle Seiten, Suche'],
       one: ['Built in – and it knows where you are.', 'Eingebaut – und sie weiß, wo du gerade bist.'],
       ch: [['Search', 'Suche', 'Type a word, get the right section.', 'Ein Wort tippen, den passenden Abschnitt finden.'],
@@ -402,7 +444,6 @@
   ];
   // In Planung: Kacheln ohne Rundgang
   const SOON = [
-    { ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a" stop-opacity=".95"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></linearGradient></defs><path d="M24 22 L8 60 H56 L40 22 Z" fill="url(#lb)"/><rect x="20" y="8" width="24" height="16" rx="4" fill="#3a3a42" stroke="#c9ced4" stroke-width="2"/><circle cx="32" cy="22" r="6" fill="#fff6c8"/><path d="M14 16 H20 M44 16 H50" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#ffd60a', t: ['Lights', 'Lights'], d: ['Light show in sync with songs and sections – DMX, scenes, cues', 'Lichtshow passend zu Songs und Abschnitten – DMX, Szenen, Cues'] },
     { ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bf5af2"/><stop offset=".5" stop-color="#0a84ff"/><stop offset="1" stop-color="#34c759"/></linearGradient></defs><rect x="6" y="12" width="52" height="34" rx="5" fill="#18181c" stroke="#c9ced4" stroke-width="2.5"/><path d="M12 36 C18 22 22 22 26 30 S34 40 38 26 S48 18 52 30" fill="none" stroke="url(#vg)" stroke-width="4" stroke-linecap="round"/><path d="M26 52 H38 M32 46 V52" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#bf5af2', t: ['Visuals', 'Visuals'], d: ['Videos and visuals on the projector, in time with the set', 'Videos und Visuals auf dem Beamer, im Takt mit dem Set'] },
   ];
   // ---------------------------------------------------------------- Sprache
@@ -418,7 +459,7 @@
     $('tiles').innerHTML = P.map((p, i) => {
       const col = i % 4, row = Math.floor(i / 4), side = col < 2 ? -1 : 1;
       return `<button type="button" class="tile" data-i="${i}" style="--c:${p.c};--fx:${side * (col === 0 || col === 3 ? 38 : 26)}vw;--fy:${row ? 22 : -10}vh;--fr:${side * (row ? 8 : -6)}deg;transition-delay:${0.1 + i * 0.07}s">
-        <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span><em class="go">${esc(L(TX.open))}</em></button>`;
+        <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span>${p.pre ? `<em class="prev">${esc(L(TX.pre))}</em>` : ''}<em class="go">${esc(L(TX.open))}</em></button>`;
     }).join('') + SOON.map((p, j) => { const i = P.length + j, col = i % 5, side = col < 2 ? -1 : col > 2 ? 1 : 0;
       return `<div class="tile soon" style="--c:${p.c};--fx:${side * 30}vw;--fy:24vh;--fr:${side * 8}deg;transition-delay:${0.1 + i * 0.07}s">
         <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span><em class="go soonb">${esc(L(TX.soon))}</em></div>`; }).join('');
@@ -530,6 +571,36 @@
         if (s === 1) learn(0, 2, 'Note 38 · Kanal 1');
         if (s === 2) learn(6, 5, 'Note 43 · Kanal 1');
       } },
+    lights: {
+      html: () => `<div class="lk"><div class="rig" id="rig"><div class="truss"></div>${[18, 39, 61, 82].map((x) => `<div class="lamp" style="left:${x}%"></div><div class="beam" style="left:${x}%"></div>`).join('')}<div class="floor"></div></div>
+        <div class="lkp"><div class="lktabs"><i class="on">Kontrollfeld</i><i>MovingHeads</i><i>Effekte</i></div>
+        <div class="cues" id="cues">${[['Blue Wash', '#0a84ff'], ['Red Wash', '#ff3b30'], ['Amber', '#ff9f0a'], ['Green', '#34c759'], ['Purple', '#bf5af2'], ['Strobe', '#f2f2f2'], ['Gobo Spin', '#64d2ff'], ['Blackout', '#3c3c3c']].map((c) => `<i style="--q:${c[1]}">${c[0]}</i>`).join('')}</div>
+        <div class="lsecs" id="lsecs">${['Intro', 'Verse', 'Chorus', 'Solo'].map((n) => `<div>${n}<div class="chips"></div></div>`).join('')}</div></div></div><div class="tap" id="tap"></div>`,
+      step(s) {
+        const CU = [['Blue Wash', '#0a84ff'], ['Red Wash', '#ff3b30'], ['Amber', '#ff9f0a'], ['Green', '#34c759'], ['Purple', '#bf5af2'], ['Strobe', '#f2f2f2'], ['Gobo Spin', '#64d2ff'], ['Blackout', '#3c3c3c']];
+        const rig = $('rig'), cues = $('cues').children, secs = $('lsecs').children;
+        const light = (i, extra) => { for (const c of cues) c.classList.remove('on'); rig.className = 'rig'; if (i == null) return;
+          cues[i].classList.add('on'); rig.style.setProperty('--lc', CU[i][1]); rig.classList.add('on'); if (extra) rig.classList.add(extra); };
+        const chip = (k, i) => { const sp = document.createElement('span'); sp.style.setProperty('--q', CU[i][1]); sp.textContent = CU[i][0]; secs[k].querySelector('.chips').appendChild(sp); };
+        const setNow = (k) => { for (const e of secs) e.classList.remove('now'); if (k != null) secs[k].classList.add('now'); };
+        for (const e of secs) { e.classList.remove('arm', 'now'); e.querySelector('.chips').innerHTML = ''; }
+        light(null);
+        const tabs = document.querySelector('#scn .lktabs').children, tab = (k) => { for (const t of tabs) t.classList.remove('on'); tabs[k].classList.add('on'); };
+        tab(0);
+        // fertige Zuordnung ab Schritt 2
+        const preset = () => { chip(0, 2); chip(1, 0); chip(2, 1); chip(3, 4); };
+        if (s === 0) { later(500, () => { tapAt('cues', 0); light(0); }); later(1700, () => { tapAt('cues', 5); light(5, 'strobe'); }); later(2700, () => { tapAt('cues', 4); light(4); }); }
+        if (s === 1) { chip(0, 2); chip(1, 0); later(500, () => { tapAt('lsecs', 2); secs[2].classList.add('arm'); }); later(1500, () => { tapAt('cues', 1); light(1); chip(2, 1); });
+          later(2600, () => secs[2].classList.remove('arm')); }
+        if (s === 2) { preset(); const seq = [[0, 2], [1, 0], [2, 1], [3, 4]];
+          seq.forEach(([k, i], n) => later(200 + n * 950, () => { setNow(k); light(i); })); }
+        if (s === 3) { preset(); secs[2].querySelector('.chips').innerHTML = ''; chip(2, 1); setNow(1); light(0);
+          later(700, () => { tapAt('lsecs', 2); secs[2].classList.add('arm'); });
+          later(1100, () => tab(1));
+          later(1500, () => { tapAt('cues', 6); chip(2, 6); });
+          later(2100, () => tab(0));
+          later(2200, () => { secs[2].classList.remove('arm'); setNow(2); light(1, 'move'); cues[6].classList.add('on'); }); }
+      } },
     help: {
       html: () => `<div class="hp"><div class="search" id="q"></div><div class="res" id="res">${[['<b>Looper</b>-Seite · Die Ringe', 1], ['<b>Looper</b> aus dem Arrangement steuern', 0], ['Clips · Reiter <b>Looper</b>', 0]].map((r) => `<div${r[1] ? ' data-hit="1"' : ''}>${r[0]}</div>`).join('')}</div><div class="tabkey" id="tabk">⇥ Tab</div></div>`,
       step(s) {
@@ -556,7 +627,7 @@
     const p = P[i], first = cur !== i || !keep;
     clearT(); cur = i; step = s;
     const stage = $('stage'); stage.style.setProperty('--c', p.c); stage.querySelector('.sbox').style.setProperty('--c', p.c);
-    $('sIc').innerHTML = p.ic; $('sTitle').textContent = L(p.t); $('sOne').textContent = L(p.one);
+    $('sIc').innerHTML = p.ic; $('sTitle').innerHTML = esc(L(p.t)) + (p.pre ? ` <em class="prev">${esc(L(TX.pre))}</em>` : ''); $('sOne').textContent = L(p.one);
     $('tbNav').innerHTML = P.slice(0, 6).map((x) => (x.id === p.id ? `<b>${esc(L(x.t))}</b>` : esc(L(x.t)))).join(' · ');
     $('chap').innerHTML = p.ch.map((c, k) => `<li data-k="${k}"${k === s ? ' class="on"' : ''} style="--dur:${DUR}ms"><b>${esc(de ? c[1] : c[0])}</b><span>${esc(de ? c[3] : c[2])}</span><i class="bar"></i></li>`).join('');
     const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
