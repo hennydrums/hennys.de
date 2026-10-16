@@ -71,6 +71,13 @@
     transform: translateY(24px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
   .stage.open .sbox { transform: none; }
   @media (max-width: 900px) { .sbox { grid-template-columns: 1fr; } }
+  /* Handy/schmal: der Bildschirm bleibt oben stehen, die Kapitel laufen darunter durch (aktives rollt mit) */
+  @media (max-width: 900px) {
+    .sbox { padding: 16px; gap: 12px; max-height: 96vh; }
+    .scrwrap { position: sticky; top: -16px; z-index: 3; margin: -16px -16px 0; padding: 16px 16px 10px; background: #121215;
+      box-shadow: 0 10px 14px -10px #000c; }
+    .ttl h3 { font-size: 22px; } .one { margin-bottom: 12px; }
+  }
   .close { position: absolute; top: 12px; right: 14px; border: 0; background: none; color: var(--dim); font-size: 22px; cursor: pointer; z-index: 2; }
   .close:hover { color: var(--fg); }
   .ttl { display: flex; align-items: center; gap: 12px; margin: 0 0 4px; } .ttl .ic { font-size: 28px; } .ttl h3 { margin: 0; font-size: 26px; }
@@ -345,7 +352,7 @@
   <div class="sbox" role="dialog" aria-modal="true">
     <button type="button" class="close" id="close" aria-label="close">✕</button>
     <nav class="pages" id="pages"></nav>
-    <div>
+    <div class="scrwrap" id="scrwrap">
       <div class="screen" id="screen"><div class="tb"><i></i><span id="tbNav"></span><span class="sp"></span><span class="live">Live</span><b>StageCase</b></div><div id="scn"></div><div class="cap" id="cap"></div></div>
     </div>
     <div>
@@ -633,6 +640,12 @@
     const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
     const cap = $('cap'); cap.classList.remove('show'); cap.textContent = de ? p.ch[s][1] : p.ch[s][0]; later(60, () => cap.classList.add('show'));
     SC[p.id].step(s);
+    // schmal: aktives Kapitel unter den stehenden Bildschirm rollen
+    if (matchMedia('(max-width: 900px)').matches) {
+      const box = stage.querySelector('.sbox'), li = $('chap').children[s], top = $('scrwrap').offsetHeight;
+      if (li) { const y = li.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - top - 6;
+        if (s === 0 && first) box.scrollTop = 0; else box.scrollTo({ top: Math.max(0, y), behavior: 'smooth' }); }
+    }
     $('play').textContent = auto ? '❚❚' : '▶'; $('stage').classList.toggle('paused', !auto);
     // Bereiche oben und Weiter/Zurueck zum naechsten Bereich
     $('pages').innerHTML = P.map((x, k) => `<button type="button" data-p="${k}" class="${k === i ? 'on' : ''}" style="--pc:${x.c}"><span class="pi">${x.ic}</span>${esc(L(x.t))}</button>`).join('');
