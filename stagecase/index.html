@@ -232,6 +232,32 @@
   .lsecs .chips span { font-size: 1.05cqw; font-weight: 700; padding: .25cqw .7cqw; border-radius: .5cqw; background: color-mix(in srgb, var(--q) 32%, #1b1b1f); box-shadow: inset .3cqw 0 0 var(--q); animation: chip .35s ease-out; }
   @keyframes chip { from { transform: scale(.5); opacity: 0; } }
 
+  /* --- Szene Drums --- */
+  .dr { display: grid; grid-template-columns: 36% 1fr; gap: 2.4cqw; height: 100%; padding-bottom: 6cqw; }
+  .mod { display: flex; flex-direction: column; gap: 1.4cqw; }
+  .modbox { position: relative; border-radius: 1.4cqw; padding: 2cqw; background: linear-gradient(#2a2a30, #1a1a1e); border: 1px solid #3a3a42; box-shadow: inset 0 .3cqw 0 #ffffff14; }
+  .modbox .brand { font-size: 1.1cqw; font-weight: 800; letter-spacing: .2em; color: #9ea4ab; }
+  .lcd { margin: 1.2cqw 0; border-radius: .8cqw; padding: 1.4cqw 1.6cqw; background: #0f1a12; border: .25cqw solid #000; font-family: ui-monospace, Menlo, monospace; color: #8cff9e; text-shadow: 0 0 1cqw #8cff9e66; }
+  .lcd .no { font-size: 1.3cqw; opacity: .8; } .lcd .kn { font-size: 2.6cqw; font-weight: 700; white-space: nowrap; overflow: hidden; }
+  .lcd.flash { animation: lcd .5s ease-out; } @keyframes lcd { 0% { background: #2d5a35; } 100% { background: #0f1a12; } }
+  .knobs { display: flex; gap: 1.4cqw; align-items: center; } .knobs i { width: 4.4cqw; height: 4.4cqw; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6b6b74, #26262c); border: .2cqw solid #111; }
+  .knobs b { flex: 1; height: 1.2cqw; border-radius: 1cqw; background: repeating-linear-gradient(90deg, #ff375f 0 .8cqw, transparent .8cqw 1.4cqw); opacity: .5; }
+  .devs { display: flex; flex-wrap: wrap; gap: .7cqw; } .devs i { font-style: normal; font-size: 1.15cqw; font-weight: 700; padding: .4cqw 1cqw; border-radius: .6cqw; background: #18181c; border: 1px solid #2a2a30; color: #8a8a92; transition: all .3s; }
+  .devs i.on { color: #fff; border-color: #ff6482; box-shadow: inset 0 -.3cqw 0 #ff6482; }
+  .drp { display: flex; flex-direction: column; gap: 1.4cqw; min-width: 0; }
+  .kits { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8cqw; }
+  .kits i { font-style: normal; display: flex; align-items: center; gap: 1cqw; font-size: 1.35cqw; font-weight: 700; padding: 1cqw 1.2cqw; border-radius: .9cqw; background: #1b1b1f; border: 1px solid #26262c; transition: all .3s; white-space: nowrap; overflow: hidden; }
+  .kits i small { font-size: 1.1cqw; color: #6d6d75; font-family: ui-monospace, Menlo, monospace; } .kits i em { margin-left: auto; font-style: normal; color: #6d6d75; }
+  .kits i em.fav { color: var(--warn); }
+  .kits i.on { background: #ff6482; color: #0b0b0d; border-color: #ff6482; } .kits i.on small, .kits i.on em { color: #0b0b0d; }
+  .dsong { display: grid; grid-template-columns: repeat(5, 1fr); gap: .7cqw; margin-top: auto; }
+  .dsong > div { min-height: 6.4cqw; border-radius: .9cqw; background: #16161a; border: 1px solid #26262c; padding: .8cqw 1cqw; font-size: 1.25cqw; font-weight: 800; transition: all .3s; }
+  .dsong > div.s, .dsong > div.e { color: #8a8a92; font-style: italic; }
+  .dsong > div.now { box-shadow: inset .5cqw 0 0 var(--play); } .dsong > div.arm { border-color: #ff6482; box-shadow: 0 0 0 .25cqw #ff6482; }
+  .dsong .k { display: block; margin-top: .6cqw; font-size: 1.05cqw; font-weight: 700; padding: .25cqw .7cqw; border-radius: .5cqw; background: #ff648233; box-shadow: inset .3cqw 0 0 #ff6482; font-style: normal; color: #f2f2f2; animation: chip .35s ease-out; white-space: nowrap; overflow: hidden; }
+  .dsong .k.inh { opacity: .45; animation: none; }
+  .dtitle { font-size: 1.3cqw; font-weight: 800; color: #8a8a92; }
+
   /* --- Szene Mixer --- */
   .mx { display: flex; gap: 2cqw; height: 100%; align-items: stretch; padding-bottom: 6cqw; }
   .st { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1cqw; background: #16161a; border-radius: 1cqw; padding: 1.2cqw .6cqw; border-top: .5cqw solid var(--sc); }
@@ -325,7 +351,7 @@
     </svg>
     <p class="claim" data-t="claim"></p>
     <p class="sub" data-t="sub"></p>
-    <div class="cta"><a class="btn main" href="#seiten" data-t="cta1"></a><a class="btn" href="mailto:drumset@hennys.de?subject=StageCase%20Beta" data-t="cta2"></a><a class="btn" href="https://looperpilot.github.io/install.html" target="_blank" rel="noopener" data-t="cta3"></a></div>
+    <div class="cta"><a class="btn main" href="#seiten" data-t="cta1"></a><a class="btn" href="mailto:info@casework-software.com?subject=StageCase%20Beta" data-t="cta2"></a><a class="btn" href="https://looperpilot.github.io/install.html" target="_blank" rel="noopener" data-t="cta3"></a></div>
     <div class="badge" data-t="badge"></div>
   </section>
 
@@ -369,7 +395,7 @@
   <section class="end reveal">
     <h2 data-t="endH"></h2>
     <p class="lead" style="margin:8px auto 0;color:var(--dim)" data-t="endP"></p>
-    <div class="cta"><a class="btn main" href="mailto:drumset@hennys.de?subject=StageCase%20Beta" data-t="cta2"></a></div>
+    <div class="cta"><a class="btn main" href="mailto:info@casework-software.com?subject=StageCase%20Beta" data-t="cta2"></a></div>
   </section>
 
   <footer><span data-t="tm"></span><span><a href="../impressum.html" data-t="imp"></a><a href="../datenschutz.html" data-t="dat"></a></span></footer>
@@ -422,7 +448,7 @@
     endH: ['Want to try it?', 'Lust auszuprobieren?'], endP: ['StageCase is in beta. Drop me a line and you’ll get an invitation.', 'StageCase ist in der Beta. Schreib mir kurz, dann bekommst du eine Einladung.'],
     tm: ['Ableton and Live are trademarks of Ableton AG. StageCase is not a product of Ableton.', 'Ableton und Live sind Marken der Ableton AG. StageCase ist kein Produkt von Ableton.'],
     imp: ['Imprint', 'Impressum'], dat: ['Privacy', 'Datenschutz'],
-    hint: ['Esc closes · ← → step by step · Tab next area', 'Esc schließt · ← → Schritt für Schritt · Tab nächster Bereich'], soon: ['Soon · in planning', 'Bald · in Planung'], pre: ['Preview', 'Vorschau'], open: ['Show me →', 'Zeig mal →'],
+    hint: ['Esc closes · ← → step by step · Tab next area', 'Esc schließt · ← → Schritt für Schritt · Tab nächster Bereich'], soon: ['Soon · in planning', 'Bald · in Planung'], pre: ['Preview', 'Vorschau'], neu: ['New', 'Neu'], open: ['Show me →', 'Zeig mal →'],
   };
   // Listen der Preis-Karten (data-li)
   const TL = {
@@ -478,12 +504,18 @@
         ['Press a key', 'Taste drücken', 'Press any note or CC on your controller – done.', 'Eine Note oder einen CC am Controller drücken – fertig.'],
         ['Songs and sections too', 'Auch Songs und Abschnitte', 'Put a song or a section on a pad and jump there.', 'Einen Song oder Abschnitt auf ein Pad legen und hinspringen.'],
         ['One connection', 'Ein Anschluss', 'All controllers reach Live through the “Stagecase” port.', 'Alle Controller kommen über den Anschluss „Stagecase“ in Live an.']] },
-    { id: 'lights', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a" stop-opacity=".95"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></linearGradient></defs><path d="M24 22 L8 60 H56 L40 22 Z" fill="url(#lb)"/><rect x="20" y="8" width="24" height="16" rx="4" fill="#3a3a42" stroke="#c9ced4" stroke-width="2"/><circle cx="32" cy="22" r="6" fill="#fff6c8"/><path d="M14 16 H20 M44 16 H50" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#ffd60a', pre: true, t: ['Lights', 'Lights'], d: ['Lightkey cues per section – they follow the song', 'Lightkey-Cues je Abschnitt – sie folgen dem Song'],
+    { id: 'lights', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a" stop-opacity=".95"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></linearGradient></defs><path d="M24 22 L8 60 H56 L40 22 Z" fill="url(#lb)"/><rect x="20" y="8" width="24" height="16" rx="4" fill="#3a3a42" stroke="#c9ced4" stroke-width="2"/><circle cx="32" cy="22" r="6" fill="#fff6c8"/><path d="M14 16 H20 M44 16 H50" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#ffd60a', badge: 'pre', t: ['Lights', 'Lights'], d: ['Lightkey cues per section – they follow the song', 'Lightkey-Cues je Abschnitt – sie folgen dem Song'],
       one: ['Your light show follows the song – no clips in Live needed.', 'Deine Lichtshow folgt dem Song – ohne Clips in Live.'],
       ch: [['Lightkey cues as buttons', 'Lightkey-Cues als Tasten', 'Your Lightkey Live Triggers become pages and cue buttons in their clip colours.', 'Deine Lightkey Live Triggers werden zu Seiten und Cue-Tasten in ihren Clipfarben.'],
         ['Light per section', 'Licht je Abschnitt', 'Tap a section, then a cue – saved in the Live set.', 'Abschnitt antippen, dann einen Cue – gespeichert im Live-Set.'],
         ['Follows the song', 'Folgt dem Song', 'Verse, chorus, solo – the light switches with the section, even when you jump or loop.', 'Strophe, Refrain, Solo – das Licht schaltet mit dem Abschnitt, auch beim Springen und Loopen.'],
         ['Several cues at once', 'Mehrere Cues zugleich', 'Colour, movement and effect from different pages – one section, one look.', 'Farbe, Bewegung und Effekt von verschiedenen Seiten – ein Abschnitt, ein Bild.']] },
+    { id: 'drums', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><path d="M14 18 L4 4 M50 18 L60 4" stroke="#e8c9a0" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="32" cy="26" rx="24" ry="8" fill="#e7e9ec"/><path d="M8 26 V46 A24 8 0 0 0 56 46 V26 A24 8 0 0 1 8 26 Z" fill="#ff375f"/><path d="M8 30 L18 50 L28 32 L38 52 L48 32 L56 46" fill="none" stroke="#c9ced4" stroke-width="2"/><ellipse cx="32" cy="26" rx="24" ry="8" fill="none" stroke="#9ea4ab" stroke-width="2"/></svg>', c: '#ff6482', badge: 'neu', t: ['Drums', 'Drums'], d: ['E-drum kits per song and section – Roland V-Drums, SPD-SX PRO', 'E-Drum-Kits je Song und Abschnitt – Roland V-Drums, SPD-SX PRO'],
+      one: ['The right kit for every song – switched by the arrangement.', 'Das passende Kit zu jedem Song – das Arrangement schaltet um.'],
+      ch: [['Kits at a tap', 'Kits auf einen Tipp', 'StageCase reads the kit names from your module – tap one and the module switches.', 'StageCase liest die Kitnamen aus deinem Modul – antippen, und das Modul schaltet um.'],
+        ['Kit per song and section', 'Kit je Song und Abschnitt', 'Put a kit on the start of a song or on a section – saved in the Live set.', 'Ein Kit auf den Songanfang oder einen Abschnitt legen – gespeichert im Live-Set.'],
+        ['Follows the song', 'Folgt dem Song', 'Brushes in the verse, the big kit in the chorus – the kit stays until a later section sets another.', 'Besen in der Strophe, das große Kit im Refrain – ein Kit bleibt, bis ein späterer Abschnitt ein anderes setzt.'],
+        ['Your module', 'Dein Modul', 'TD-07, TD-17, TD-27, TD-50 and SPD-SX PRO via USB – the TD-20 and others via a MIDI interface. Favourites with a star.', 'TD-07, TD-17, TD-27, TD-50 und SPD-SX PRO per USB – TD-20 und Co. über ein MIDI-Interface. Favoriten mit Stern.']] },
     { id: 'help', ic: '❓', c: '#8e8e93', t: ['Help', 'Hilfe'], d: ['Setup, every page, search', 'Einrichtung, alle Seiten, Suche'],
       one: ['Built in – and it knows where you are.', 'Eingebaut – und sie weiß, wo du gerade bist.'],
       ch: [['Search', 'Suche', 'Type a word, get the right section.', 'Ein Wort tippen, den passenden Abschnitt finden.'],
@@ -509,7 +541,7 @@
     $('tiles').innerHTML = P.map((p, i) => {
       const col = i % 4, row = Math.floor(i / 4), side = col < 2 ? -1 : 1;
       return `<button type="button" class="tile" data-i="${i}" style="--c:${p.c};--fx:${side * (col === 0 || col === 3 ? 38 : 26)}vw;--fy:${row ? 22 : -10}vh;--fr:${side * (row ? 8 : -6)}deg;transition-delay:${0.1 + i * 0.07}s">
-        <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span>${p.pre ? `<em class="prev">${esc(L(TX.pre))}</em>` : ''}<em class="go">${esc(L(TX.open))}</em></button>`;
+        <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span>${p.badge ? `<em class="prev">${esc(L(TX[p.badge]))}</em>` : ''}<em class="go">${esc(L(TX.open))}</em></button>`;
     }).join('') + SOON.map((p, j) => { const i = P.length + j, col = i % 5, side = col < 2 ? -1 : col > 2 ? 1 : 0;
       return `<div class="tile soon" style="--c:${p.c};--fx:${side * 30}vw;--fy:24vh;--fr:${side * 8}deg;transition-delay:${0.1 + i * 0.07}s">
         <span class="ic">${p.ic}</span><b>${esc(L(p.t))}</b><span>${esc(L(p.d))}</span><em class="go soonb">${esc(L(TX.soon))}</em></div>`; }).join('');
@@ -651,6 +683,31 @@
           later(2100, () => tab(0));
           later(2200, () => { secs[2].classList.remove('arm'); setNow(2); light(1, 'move'); cues[6].classList.add('on'); }); }
       } },
+    drums: {
+      html: () => `<div class="dr"><div class="mod"><div class="modbox"><div class="brand">ROLAND · TD-27</div><div class="lcd" id="lcd"><div class="no" id="lcdNo">KIT 001</div><div class="kn" id="lcdKn">Studio Classic</div></div>
+        <div class="knobs"><i></i><b></b><i></i></div></div><div class="devs" id="devs"><i class="on">TD-27</i><i>SPD-SX PRO</i><i>TD-20 · MIDI</i></div></div>
+        <div class="drp"><div class="kits" id="kits">${[['001', 'Studio Classic'], ['002', 'Brushes Jazz'], ['003', 'Rock Arena'], ['004', 'Funk Tight'], ['005', 'Electro 808'], ['006', 'Latin Perc']].map((k, i) => `<i><small>${k[0]}</small>${k[1]}<em${i === 1 || i === 2 ? ' class="fav"' : ''}>${i === 1 || i === 2 ? '★' : '☆'}</em></i>`).join('')}</div>
+        <div class="dtitle">Golden Hour</div><div class="dsong" id="dsong">${['Start', 'Intro', 'Verse', 'Chorus', 'Songende'].map((n, i) => `<div class="${i === 0 ? 's' : i === 4 ? 'e' : ''}">${n}</div>`).join('')}</div></div></div><div class="tap" id="tap"></div>`,
+      step(s) {
+        const KT = [['001', 'Studio Classic'], ['002', 'Brushes Jazz'], ['003', 'Rock Arena'], ['004', 'Funk Tight'], ['005', 'Electro 808'], ['006', 'Latin Perc']];
+        const kits = $('kits').children, cells = $('dsong').children, devs = $('devs').children;
+        const show = (i) => { for (const k of kits) k.classList.remove('on'); if (i == null) return; kits[i].classList.add('on');
+          $('lcdNo').textContent = 'KIT ' + KT[i][0]; $('lcdKn').textContent = KT[i][1]; const l = $('lcd'); l.classList.remove('flash'); void l.offsetWidth; l.classList.add('flash'); };
+        const put = (c, i, inh) => { const old = cells[c].querySelector('.k'); if (old) old.remove(); const e = document.createElement('em'); e.className = 'k' + (inh ? ' inh' : ''); e.textContent = KT[i][1]; cells[c].appendChild(e); };
+        const now = (c) => { for (const e of cells) e.classList.remove('now'); if (c != null) cells[c].classList.add('now'); };
+        const dev = (k) => { for (const d of devs) d.classList.remove('on'); devs[k].classList.add('on'); };
+        for (const e of cells) { e.classList.remove('arm', 'now'); const k = e.querySelector('.k'); if (k) k.remove(); }
+        dev(0); show(0);
+        // Zuordnung: Start = Studio, Verse = Brushes, Chorus = Rock Arena; Intro erbt vom Start
+        const preset = () => { put(0, 0); put(1, 0, true); put(2, 1); put(3, 2); };
+        if (s === 0) { later(500, () => { tapAt('kits', 3); show(3); }); later(1600, () => { tapAt('kits', 4); show(4); }); later(2700, () => { tapAt('kits', 1); show(1); }); }
+        if (s === 1) { put(0, 0); put(1, 0, true);
+          later(500, () => { tapAt('dsong', 2); cells[2].classList.add('arm'); }); later(1300, () => { tapAt('kits', 1); put(2, 1); cells[2].classList.remove('arm'); });
+          later(2100, () => { tapAt('dsong', 3); cells[3].classList.add('arm'); }); later(2900, () => { tapAt('kits', 2); put(3, 2); cells[3].classList.remove('arm'); }); }
+        if (s === 2) { preset(); [[0, 0], [1, 0], [2, 1], [3, 2]].forEach(([c, k], n) => later(200 + n * 950, () => { now(c); show(k); })); }
+        if (s === 3) { preset(); later(500, () => dev(1)); later(1200, () => { $('lcdNo').textContent = 'KIT 012'; $('lcdKn').textContent = 'SPD Loops'; });
+          later(1900, () => dev(2)); later(2500, () => { $('lcdNo').textContent = 'PC 5'; $('lcdKn').textContent = 'Fusion'; }); later(3300, () => { dev(0); show(0); }); }
+      } },
     help: {
       html: () => `<div class="hp"><div class="search" id="q"></div><div class="res" id="res">${[['<b>Looper</b>-Seite · Die Ringe', 1], ['<b>Looper</b> aus dem Arrangement steuern', 0], ['Clips · Reiter <b>Looper</b>', 0]].map((r) => `<div${r[1] ? ' data-hit="1"' : ''}>${r[0]}</div>`).join('')}</div><div class="tabkey" id="tabk">⇥ Tab</div></div>`,
       step(s) {
@@ -677,7 +734,7 @@
     const p = P[i], first = cur !== i || !keep;
     clearT(); cur = i; step = s;
     const stage = $('stage'); stage.style.setProperty('--c', p.c); stage.querySelector('.sbox').style.setProperty('--c', p.c);
-    $('sIc').innerHTML = p.ic; $('sTitle').innerHTML = esc(L(p.t)) + (p.pre ? ` <em class="prev">${esc(L(TX.pre))}</em>` : ''); $('sOne').textContent = L(p.one);
+    $('sIc').innerHTML = p.ic; $('sTitle').innerHTML = esc(L(p.t)) + (p.badge ? ` <em class="prev">${esc(L(TX[p.badge]))}</em>` : ''); $('sOne').textContent = L(p.one);
     $('tbNav').innerHTML = P.slice(0, 6).map((x) => (x.id === p.id ? `<b>${esc(L(x.t))}</b>` : esc(L(x.t)))).join(' · ');
     $('chap').innerHTML = p.ch.map((c, k) => `<li data-k="${k}"${k === s ? ' class="on"' : ''} style="--dur:${DUR}ms"><b>${esc(de ? c[1] : c[0])}</b><span>${esc(de ? c[3] : c[2])}</span><i class="bar"></i></li>`).join('');
     const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
