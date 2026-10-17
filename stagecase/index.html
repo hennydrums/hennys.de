@@ -289,6 +289,21 @@
   .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; } @media (max-width: 760px) { .facts { grid-template-columns: 1fr; } }
   .facts div { padding: 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); } .facts b { display: block; margin-bottom: 4px; } .facts span { color: var(--dim); font-size: 14px; }
   .end { text-align: center; padding: 8vh 0 6vh; }
+  /* Preise */
+  .prices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; } @media (max-width: 860px) { .prices { grid-template-columns: 1fr; } }
+  .pc { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 22px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); }
+  .pc.best { border-color: var(--or); box-shadow: inset 0 3px 0 var(--or); background: linear-gradient(160deg, color-mix(in srgb, var(--or) 12%, var(--card)), var(--card) 65%); }
+  .pc em { position: absolute; top: 14px; right: 14px; font-style: normal; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #0b0b0d; background: var(--or); border-radius: 6px; padding: 2px 7px; }
+  .pc .pr s { font-size: 20px; font-weight: 600; color: var(--faint); margin-right: 4px; }
+  .pc b { font-size: 19px; } .pc .pr { font-size: 34px; font-weight: 800; letter-spacing: -.02em; } .pc small { color: var(--faint); font-size: 12.5px; }
+  .pc ul { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--dim); }
+  .pc ul li::before { content: '✓'; color: var(--play); font-weight: 800; margin-right: 8px; }
+  .pc ul li.plus::before { content: '＋'; color: var(--or); }
+  .pc .buy { margin-top: auto; padding-top: 14px; font-size: 12.5px; font-weight: 700; color: var(--faint); }
+  .terms { margin: 22px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 24px; font-size: 14px; color: var(--dim); }
+  @media (max-width: 760px) { .terms { grid-template-columns: 1fr; } }
+  .terms li::before { content: '•'; color: var(--or); margin-right: 8px; }
+  .tlink { margin: 16px 0 0; font-size: 14px; } .tlink a { color: var(--or); }
   footer { border-top: 1px solid var(--line); padding: 20px 0 40px; color: var(--faint); font-size: 13px; display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
   footer a { color: var(--dim); text-decoration: none; margin-right: 14px; }
   .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; } .reveal.in { opacity: 1; transform: none; }
@@ -339,6 +354,18 @@
     </div>
   </section>
 
+  <section class="sect reveal" id="preise">
+    <h2 data-t="prH"></h2>
+    <p class="lead" data-t="prL"></p>
+    <div class="prices">
+      <div class="pc"><b data-t="p0t"></b><div class="pr" data-t="p0p"></div><small data-t="p0s"></small><ul data-li="p0f"></ul></div>
+      <div class="pc"><b>Lite</b><div class="pr"><s>79 €</s> 59 €</div><small data-t="intro"></small><ul data-li="p1f"></ul><span class="buy" data-t="soonBuy"></span></div>
+      <div class="pc best"><em data-t="rec"></em><b>Pro</b><div class="pr"><s>249 €</s> 179 €</div><small data-t="intro"></small><ul data-li="p2f"></ul><span class="buy" data-t="soonBuy"></span></div>
+    </div>
+    <ul class="terms" data-li="terms"></ul>
+    <p class="tlink"><a href="bedingungen.html" data-t="tlink"></a></p>
+  </section>
+
   <section class="end reveal">
     <h2 data-t="endH"></h2>
     <p class="lead" style="margin:8px auto 0;color:var(--dim)" data-t="endP"></p>
@@ -386,10 +413,25 @@
     x1b: ['A Mac', 'Einen Mac'], x1s: ['macOS 12 or newer. The app runs in its own window – tablets and phones join through the browser.', 'macOS 12 oder neuer. Die App läuft im eigenen Fenster – Tablets und Handys kommen per Browser dazu.'],
     x2b: ['Ableton Live 12', 'Ableton Live 12'], x2s: ['Live 12 lets StageCase drive the loopers directly. Live 11 works for display, songs, clips and mixer.', 'Mit Live 12 bedient StageCase die Looper direkt. Live 11 geht für Anzeige, Songs, Clips und Mixer.'],
     x3b: ['Nothing else', 'Sonst nichts'], x3s: ['No MIDI mappings, no IAC bus, no extra hardware. Controllers are optional.', 'Keine MIDI-Zuweisungen, kein IAC-Bus, keine Extra-Hardware. Controller sind optional.'],
+    prH: ['Prices & terms', 'Preise & Bedingungen'],
+    prL: ['Try everything for 14 days, then pick the edition you need. One payment – no subscription.', '14 Tage alles ausprobieren, dann die passende Ausgabe wählen. Einmal zahlen – kein Abo.'],
+    p0t: ['Trial', 'Testversion'], p0p: ['0 €', '0 €'], p0s: ['14 days, no key needed', '14 Tage, ohne Schlüssel'],
+    once: ['one-time · incl. VAT', 'einmalig · inkl. MwSt.'], intro: ['Launch price · one-time · incl. VAT', 'Einführungspreis · einmalig · inkl. MwSt.'], rec: ['Recommended', 'Empfohlen'],
+    soonBuy: ['Available soon – currently in beta', 'Bald erhältlich – derzeit in der Beta'],
+    tlink: ['Licence terms, refunds and seller information →', 'Lizenzbedingungen, Rückerstattung und Verkäufer →'],
     endH: ['Want to try it?', 'Lust auszuprobieren?'], endP: ['StageCase is in beta. Drop me a line and you’ll get an invitation.', 'StageCase ist in der Beta. Schreib mir kurz, dann bekommst du eine Einladung.'],
     tm: ['Ableton and Live are trademarks of Ableton AG. StageCase is not a product of Ableton.', 'Ableton und Live sind Marken der Ableton AG. StageCase ist kein Produkt von Ableton.'],
     imp: ['Imprint', 'Impressum'], dat: ['Privacy', 'Datenschutz'],
     hint: ['Esc closes · ← → step by step · Tab next area', 'Esc schließt · ← → Schritt für Schritt · Tab nächster Bereich'], soon: ['Soon · in planning', 'Bald · in Planung'], pre: ['Preview', 'Vorschau'], open: ['Show me →', 'Zeig mal →'],
+  };
+  // Listen der Preis-Karten (data-li)
+  const TL = {
+    p0f: [['Everything in Pro for 14 days', 'Alles aus Pro, 14 Tage lang'], ['Afterwards: free with 1 looper', 'Danach kostenlos weiter mit 1 Looper']],
+    p1f: [['Up to 8 loopers', 'Bis zu 8 Looper'], ['nanoKONTROL2 and SPD-SX PRO', 'nanoKONTROL2 und SPD-SX PRO'], ['Display on every tablet and phone', 'Anzeige auf jedem Tablet und Handy']],
+    p2f: [['Everything in Lite, unlimited loopers', 'Alles aus Lite, Looper unbegrenzt'], ['Clips with MC6 Pro, Songs & setlist, Lead Sheet', 'Clips mit MC6 Pro, Songs & Setlist, Lead Sheet'], ['Mixer, audio interface presets, MIDI mapping', 'Mixer, Soundkarten-Presets, MIDI-Zuordnung'], ['Second Mac, Lights and Drums', 'Zweiter Mac, Lights und Drums']],
+    terms: [['Licence forever – runs as long as you like', 'Lizenz für immer – läuft, solange du willst'], ['12 months of updates included; renewal optional (Lite 29 €, Pro 79 €)', '12 Monate Updates inklusive; Verlängerung optional (Lite 29 €, Pro 79 €)'],
+      ['2 Macs per licence, movable to a new Mac', '2 Macs je Lizenz, auf einen neuen Mac übertragbar'], ['14 days money back, no questions asked', '14 Tage Geld zurück, ohne Angabe von Gründen'],
+      ['Secure checkout via Lemon Squeezy (card, PayPal, Apple Pay)', 'Sicher bezahlen über Lemon Squeezy (Karte, PayPal, Apple Pay)'], ['Invoice with VAT from Lemon Squeezy', 'Rechnung mit MwSt. von Lemon Squeezy'], ['Upgrade Lite → Pro: pay only the difference', 'Upgrade Lite → Pro: nur die Differenz zahlen']],
   };
   // ---------------------------------------------------------------- Seiten und Kapitel
   const XLR = '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#2c2c33" stroke="#c9ced4" stroke-width="3"/><circle cx="32" cy="32" r="16" fill="#18181c"/><circle cx="25" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="39" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="32" cy="40" r="3.2" fill="#e7e9ec"/><path d="M28 12 h8 v4 h-8 z" fill="#c9ced4"/></svg>';   // XLR-Buchse fuer die Soundkarte
@@ -462,6 +504,7 @@
   function texts() {
     document.documentElement.lang = de ? 'de' : 'en';
     for (const el of document.querySelectorAll('[data-t]')) el.textContent = L(TX[el.dataset.t]);
+    for (const el of document.querySelectorAll('[data-li]')) el.innerHTML = TL[el.dataset.li].map((x) => `<li>${esc(L(x))}</li>`).join('');
     for (const b of document.querySelectorAll('.lang button')) b.classList.toggle('on', (b.dataset.l === 'de') === de);
     $('tiles').innerHTML = P.map((p, i) => {
       const col = i % 4, row = Math.floor(i / 4), side = col < 2 ? -1 : 1;
