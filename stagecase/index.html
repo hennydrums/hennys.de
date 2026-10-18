@@ -78,6 +78,13 @@
       box-shadow: 0 10px 14px -10px #000c; }
     .ttl h3 { font-size: 22px; } .one { margin-bottom: 12px; }
   }
+  /* Handy: Bildschirm groesser (1,8-fach) im Ausschnitt -- die "Kamera" faehrt dorthin, wo gerade getippt wird */
+  .scrcam { position: relative; }
+  @media (max-width: 600px) {
+    .scrcam { overflow: hidden; border-radius: 12px; }
+    .scrcam .screen { width: 180%; border-width: 5px; transform: translateX(var(--camx, -22%)); transition: transform .7s cubic-bezier(.3,.7,.2,1); }
+    .scrcam .screen .cap { left: calc(3cqw - var(--camx, -22%)); right: auto; max-width: 52%; font-size: 2.6cqw; transition: left .7s cubic-bezier(.3,.7,.2,1), opacity .4s, transform .4s; }   /* Beschriftung bleibt im Ausschnitt */
+  }
   .close { position: absolute; top: 12px; right: 14px; border: 0; background: none; color: var(--dim); font-size: 22px; cursor: pointer; z-index: 2; }
   .close:hover { color: var(--fg); }
   .ttl { display: flex; align-items: center; gap: 12px; margin: 0 0 4px; } .ttl .ic { font-size: 28px; } .ttl h3 { margin: 0; font-size: 26px; }
@@ -405,9 +412,9 @@
   <div class="sbox" role="dialog" aria-modal="true">
     <button type="button" class="close" id="close" aria-label="close">✕</button>
     <nav class="pages" id="pages"></nav>
-    <div class="scrwrap" id="scrwrap">
+    <div class="scrwrap" id="scrwrap"><div class="scrcam" id="scrcam">
       <div class="screen" id="screen"><div class="tb"><i></i><span id="tbNav"></span><span class="sp"></span><span class="live">Live</span><b>StageCase</b></div><div id="scn"></div><div class="cap" id="cap"></div></div>
-    </div>
+    </div></div>
     <div>
       <div class="ttl"><span class="ic" id="sIc"></span><h3 id="sTitle"></h3></div>
       <p class="one" id="sOne"></p>
@@ -474,16 +481,16 @@
         ['Recording range › … ‹', 'Aufnahme-Bereich › … ‹', 'Mark the tracks you record into – fades and faders follow the range.', 'Markiere die Spuren, in die du aufnimmst – Fades und Fader folgen dem Bereich.'],
         ['MC6 Pro by foot', 'MC6 Pro per Fuß', 'Record, play, next scene – the MC6 shows track and scene on its display.', 'Aufnehmen, abspielen, nächste Szene – das MC6 zeigt Spur und Szene im Display.'],
         ['Tempo per scene', 'Tempo je Szene', '“Chorus {140}” – the scene sets the tempo when it starts.', '„Chorus {140}“ – die Szene setzt beim Start das Tempo.']] },
-    { id: 'songs', ic: '☰', c: '#ff9f0a', t: ['Songs', 'Songs'], d: ['Setlist and sections – jump, loop, stop after song', 'Setlist und Abschnitte – springen, loopen, nach dem Song stoppen'],
+    { id: 'songs', ic: '☰', c: '#ff9f0a', t: ['Arrangement', 'Arrangement'], d: ['Setlist and sections – jump, loop, stop after song', 'Setlist und Abschnitte – springen, loopen, nach dem Song stoppen'],
       one: ['Your set list, straight from the Live set.', 'Deine Setlist, direkt aus dem Live-Set.'],
       ch: [['Setlist from locators', 'Setlist aus Locators', 'Songs and sections come from locators or scenes – reorder by drag.', 'Songs und Abschnitte kommen aus Locators oder Szenen – sortieren per Ziehen.'],
         ['Sections as big buttons', 'Abschnitte als große Tasten', 'Tap: jump there, quantized. Hold: play from there.', 'Tippen: quantisiert hinspringen. Halten: von dort spielen.'],
         ['Loop it, stop after', 'Loopen, danach stoppen', 'Loop a section until you move on – or stop at the end of the song.', 'Einen Abschnitt loopen, bis du weiterschaltest – oder am Songende stoppen.'],
         ['Tempo from the name', 'Tempo aus dem Namen', '“Rehab 145bpm” – StageCase sets the tempo when the song starts.', '„Rehab 145bpm“ – StageCase setzt das Tempo, wenn der Song beginnt.']] },
-    { id: 'leadsheet', ic: '♪', c: '#ffd60a', t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard and notes', 'Text mit Akkorden, Griffbrett und Noten'],
-      one: ['The current song as a sheet that reads along.', 'Der aktuelle Song als Blatt, das mitliest.'],
+    { id: 'leadsheet', ic: '♪', c: '#ffd60a', cam: 0.33, t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard and notes – edit chords, text and sections', 'Text mit Akkorden, Griffbrett und Noten – Akkorde, Text und Abschnitte bearbeiten'],
+      one: ['The current song as a sheet that reads along – plus an editor for chords, text and sections, right on the timeline.', 'Der aktuelle Song als Blatt, das mitliest – dazu ein Editor für Akkorde, Text und Abschnitte direkt auf der Zeitleiste.'],
       ch: [['Reads along', 'Liest mit', 'The line being played is highlighted – tap a line to jump there.', 'Die gespielte Zeile ist hinterlegt – Tipp auf eine Zeile springt hin.'],
-        ['Chords and transposing', 'Akkorde und Transponieren', 'Chords from the lyrics or a +Chords track – ♭ ♯ moves them per song.', 'Akkorde aus dem Text oder einer +Chords-Spur – ♭ ♯ verschiebt sie je Song.'],
+        ['Chords and transposing', 'Akkorde und Transponieren', 'Chords from the lyrics or a +Chords track – ♭ ♯ moves them per song, and the chord track in Live plays along.', 'Akkorde aus dem Text oder einer +Chords-Spur – ♭ ♯ verschiebt sie je Song, und die Akkordspur in Live spielt mit.'],
         ['Fretboard', 'Griffbrett', 'Now, next, then – the shape flashes when the chord changes.', 'Jetzt, danach, dann – der Griff blitzt beim Wechsel auf.'],
         ['Notes for your instrument', 'Noten fürs Instrument', 'A +NOTES track becomes sheet music, three bars ahead.', 'Eine +NOTES-Spur wird zu Noten, drei Takte voraus.']] },
     { id: 'mixer', ic: '🎚', c: '#bf5af2', t: ['Mixer', 'Mixer'], d: ['Faders, mute, guide tracks and presets', 'Fader, Stumm, Guide-Spuren und Presets'],
@@ -714,7 +721,7 @@
         const res = $('res').children; for (const r of res) r.classList.remove('show', 'hit'); $('tabk').classList.remove('show', 'down'); $('q').textContent = '';
         if (s === 0 || s === 1) { const w = 'Looper'; for (let i = 1; i <= w.length; i++) later(150 * i, () => { $('q').textContent = w.slice(0, i); }); later(1100, () => { for (const r of res) r.classList.add('show'); }); }
         if (s === 1) later(1900, () => res[0].classList.add('hit'));
-        if (s === 2) { $('q').textContent = 'Setlist'; later(400, () => { res[0].innerHTML = '<b>Setlist</b> – Songs-Seite'; res[0].classList.add('show'); }); later(1700, () => { res[0].innerHTML = '<b>Setlist</b> – Songs page'; }); }
+        if (s === 2) { $('q').textContent = 'Setlist'; later(400, () => { res[0].innerHTML = '<b>Setlist</b> – Arrangement-Seite'; res[0].classList.add('show'); }); later(1700, () => { res[0].innerHTML = '<b>Setlist</b> – Arrangement page'; }); }
         else { res[0].innerHTML = '<b>Looper</b>-Seite · Die Ringe'; }
         if (s === 3) { $('tabk').classList.add('show'); later(900, () => $('tabk').classList.add('down')); later(1200, () => $('tabk').classList.remove('down')); }
       } },
@@ -724,9 +731,17 @@
   const DUR = 4200;
   const later = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
   const clearT = () => { timers.forEach(clearTimeout); timers = []; clearTimeout(adv); };
+  // Handy: Kamera auf die Stelle x (0..1 der Bildschirmbreite) -- der vergroesserte Bildschirm rutscht seitlich
+  function cam(x) {
+    const w = $('screen'), c = $('scrcam'); if (!w || !c) return;
+    if (!matchMedia('(max-width: 600px)').matches) { w.style.removeProperty('--camx'); return; }
+    const W = w.offsetWidth, V = c.clientWidth, px = Math.max(V - W, Math.min(0, V / 2 - x * W));
+    w.style.setProperty('--camx', Math.round(px) + 'px');
+  }
   function tapAt(parentId, i) {
     const t = $('tap'), el = $(parentId).children[i]; if (!t || !el) return;
     const s = $('screen').getBoundingClientRect(), r = el.getBoundingClientRect();
+    cam((r.left - s.left + r.width / 2) / s.width);
     t.style.left = (r.left - s.left + r.width / 2 - 8) + 'px'; t.style.top = (r.top - s.top + r.height / 2 - 8) + 'px';
     t.classList.remove('go'); void t.offsetWidth; t.classList.add('go');
   }
@@ -739,6 +754,7 @@
     $('chap').innerHTML = p.ch.map((c, k) => `<li data-k="${k}"${k === s ? ' class="on"' : ''} style="--dur:${DUR}ms"><b>${esc(de ? c[1] : c[0])}</b><span>${esc(de ? c[3] : c[2])}</span><i class="bar"></i></li>`).join('');
     const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
     const cap = $('cap'); cap.classList.remove('show'); cap.textContent = de ? p.ch[s][1] : p.ch[s][0]; later(60, () => cap.classList.add('show'));
+    if (first || s === 0) cam(p.cam || 0.42);            // Handy: neuer Bereich -- Kamera auf die Mitte-links (dort beginnen die Szenen; je Bereich anpassbar)
     SC[p.id].step(s);
     // schmal: aktives Kapitel unter den stehenden Bildschirm rollen
     if (matchMedia('(max-width: 900px)').matches) {
