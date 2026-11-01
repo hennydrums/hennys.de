@@ -181,6 +181,37 @@
   .stopb.on { background: var(--rec); color: #fff; border-color: transparent; }
   .bpm { font-size: 1.8cqw; color: var(--warn); font-weight: 800; transition: transform .3s; } .bpm.pop { transform: scale(1.3); }
 
+  .songs { position: relative; }
+  .slw { display: flex; flex-direction: column; gap: .8cqw; }
+  .sl .ck { font-style: normal; color: var(--play); margin-right: .7cqw; font-weight: 800; transition: color .3s; }
+  .sl div.off { opacity: .35; } .sl div.off .ck { color: #555; } .sl div.off span { text-decoration: line-through; }
+  .sl div.drag { transform: translateX(1.6cqw); box-shadow: 0 1cqw 2cqw #000c; }
+  .add { align-self: flex-start; font-size: 1.4cqw; font-weight: 800; padding: .5cqw 1.2cqw; border-radius: .7cqw; border: 1px dashed #555; color: #aaa; transition: all .3s; }
+  .add.hot { border-color: var(--or); color: var(--or); box-shadow: 0 0 0 .3cqw #ff9f0a44; }
+  .btns { display: flex; gap: 1cqw; }
+  .pracb { font-size: 1.5cqw; padding: .6cqw 1.2cqw; border-radius: .8cqw; border: 1px solid #444; color: #aaa; transition: all .3s; }
+  .prac .pracb { background: var(--warn); color: #000; border-color: transparent; font-weight: 800; }
+  .startb { font-size: 1.5cqw; padding: .6cqw 1.2cqw; border-radius: .8cqw; background: #222; color: #777; display: none; } .prac .startb { display: block; } .startb.go { background: var(--play); color: #000; font-weight: 800; }
+  .secs { position: relative; transition: margin-top .4s; } .prac .secs { margin-top: 2.6cqw; }
+  .pk { position: absolute; left: calc(33.33% + .35cqw); right: 0; top: -2.2cqw; height: 1.7cqw; border: .3cqw solid var(--warn); border-bottom: 0; border-radius: .6cqw .6cqw 0 0; opacity: 0; transition: opacity .4s; font-size: 1.15cqw; font-weight: 800; color: var(--warn); }
+  .pk b { position: absolute; left: .6cqw; top: -2cqw; white-space: nowrap; } .pk em { position: absolute; right: .6cqw; top: -2cqw; font-style: normal; }
+  .prac .pk { opacity: 1; }
+  .ed { position: absolute; inset: 0; background: #111114; border-radius: 1cqw; display: flex; flex-direction: column; gap: 1cqw; opacity: 0; transform: scale(.97); pointer-events: none; transition: opacity .5s, transform .5s; }
+  .edit .ed { opacity: 1; transform: none; }
+  .edh { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.7cqw; padding: .4cqw .2cqw .8cqw; border-bottom: .25cqw solid var(--warn); }
+  .edh span { color: #9a9aa4; letter-spacing: .5cqw; font-size: 1.5cqw; }
+  .edw { position: relative; display: flex; flex-direction: column; gap: .7cqw; }
+  .edr { display: grid; grid-template-columns: 11cqw 1fr; align-items: center; gap: 1cqw; }
+  .edr > b { font-size: 1.15cqw; color: #9a9aa4; text-transform: uppercase; letter-spacing: .08em; }
+  .lane { position: relative; height: 3.4cqw; background: #1a1a1f; border-radius: .6cqw; display: flex; gap: .25cqw; overflow: hidden; }
+  .lane.sx i { font-style: normal; flex-basis: 0; display: grid; place-items: center; font-size: 1.3cqw; font-weight: 800; background: color-mix(in srgb, var(--sc) 30%, #1b1b20); border-top: .4cqw solid var(--sc); transition: flex-grow .9s cubic-bezier(.3,.8,.3,1), box-shadow .3s; }
+  .lane.sx i.grab { box-shadow: inset -.45cqw 0 0 var(--warn); }
+  .lane.cd i { flex: 1; font-style: normal; display: grid; place-items: center; color: #7fa8ff; font-weight: 800; font-size: 1.3cqw; border-right: 1px solid #2a2a30; }
+  .lane .m { position: absolute; top: 50%; transform: translateY(-50%); font-style: normal; font-size: 1.15cqw; font-weight: 700; white-space: nowrap; padding: .2cqw .6cqw; border-radius: .4cqw; background: #26262c; }
+  .lane .m.t { background: none; color: #c8c8d0; }
+  .lane .m.dot { width: 1.6cqw; height: 1.6cqw; padding: 0; border-radius: 50%; background: var(--q); box-shadow: 0 0 1cqw var(--q); }
+  .edp { position: absolute; top: 0; bottom: 0; width: .25cqw; background: var(--warn); left: 26%; transition: left 2.2s linear; }
+
   /* --- Szene Lead Sheet --- */
   .ls { display: grid; grid-template-columns: 1fr 30%; gap: 2.4cqw; height: 100%; }
   .paper { background: #fbf7ea; color: #1b1b1f; border-radius: .8cqw; padding: 2.4cqw 3cqw; font-size: 1.9cqw; line-height: 1.25; overflow: hidden; }
@@ -200,6 +231,9 @@
   .staff i::after { content: ""; position: absolute; right: 0; bottom: .4cqw; width: .2cqw; height: 3.4cqw; background: #eee; }
   .staff b { position: absolute; top: 1cqw; bottom: 1cqw; width: .3cqw; background: var(--warn); left: 10%; }
   .notes .staff b { animation: ph 3.6s linear infinite; } @keyframes ph { from { left: 8%; } to { left: 92%; } }
+  .paper .cm { position: absolute; right: .4cqw; top: .1cqw; font-size: 1.25cqw; font-weight: 700; color: #5b2bb5; background: #efe4ff; border-radius: .5cqw; padding: .1cqw .7cqw; opacity: 0; transform: translateY(.4cqw); transition: opacity .35s, transform .35s; }
+  .paper .cm.on { opacity: 1; transform: none; } .paper .cm b { margin-right: .4cqw; }
+  .who { align-self: flex-start; font-size: 1.4cqw; font-weight: 800; padding: .5cqw 1cqw; border-radius: .8cqw; background: #18181c; color: #9a9aa4; transition: all .3s; } .who.on { color: #fff; box-shadow: 0 0 0 .3cqw #bf5af2; }
   .trp { display: inline-flex; gap: .6cqw; align-items: center; font-size: 1.5cqw; color: #9a9aa4; }
   .trp i { font-style: normal; border: 1px solid #444; border-radius: .6cqw; padding: .2cqw .8cqw; color: #fff; } .trp b { color: var(--warn); }
 
@@ -276,6 +310,21 @@
   .st.guide .nm::after { content: " GUIDE"; color: var(--warn); font-size: 1cqw; }
   .pre { position: absolute; left: 3cqw; bottom: 2cqw; display: flex; gap: 1cqw; } .pre i { font-style: normal; font-size: 1.4cqw; padding: .5cqw 1.2cqw; border-radius: .7cqw; background: #222; border: 1px solid #3a3a40; transition: all .3s; }
   .pre i.on { background: var(--fg); color: #000; }
+
+  /* --- Szene Monitor-Mixer --- */
+  .mon { display: grid; grid-template-columns: 46% 1fr; gap: 2.4cqw; height: 100%; padding-bottom: 5cqw; }
+  .phn { background: #0d0d10; border: .35cqw solid #3a3a42; border-radius: 2.4cqw; padding: 1.4cqw; display: flex; flex-direction: column; gap: 1cqw; }
+  .mtabs { display: flex; gap: .6cqw; } .mtabs i { flex: 1; text-align: center; font-style: normal; font-size: 1.1cqw; font-weight: 700; padding: .5cqw .4cqw; border-radius: .6cqw; background: #18181c; border: 1px solid #2a2a30; color: #8a8a92; transition: all .3s; white-space: nowrap; }
+  .mtabs i.on { color: #fff; border-color: #5e5ce6; box-shadow: inset 0 -.3cqw 0 #5e5ce6; }
+  .mon .mx { padding-bottom: 0; gap: .8cqw; flex: 1; } .mon .st { padding: .8cqw .3cqw; } .mon .st .kn { width: 3cqw; margin-left: -1.5cqw; }
+  .desk { display: flex; flex-direction: column; gap: 1.2cqw; }
+  .brand2 { display: flex; gap: .8cqw; } .brand2 i { font-style: normal; font-size: 1.3cqw; padding: .5cqw 1.2cqw; border-radius: .7cqw; background: #222; border: 1px solid #3a3a40; transition: all .3s; } .brand2 i.on { background: var(--fg); color: #000; }
+  .conn { font-size: 1.4cqw; color: var(--play); font-weight: 700; } .conn.wait { color: var(--warn); animation: blink .5s infinite alternate; }
+  .mtx { display: grid; grid-template-columns: 8cqw repeat(6, 1fr); gap: .5cqw; font-size: 1.1cqw; align-items: center; }
+  .mtx > span { color: #9a9aa4; font-weight: 700; white-space: nowrap; } .mtx > em { font-style: normal; color: #6b6b74; text-align: center; font-size: 1cqw; }
+  .mtx i { height: 2.2cqw; border-radius: .4cqw; background: #1d1d22; overflow: hidden; display: flex; align-items: flex-end; transition: box-shadow .3s; }
+  .mtx i b { width: 100%; background: #5e5ce6aa; transition: height .9s cubic-bezier(.3,.8,.3,1), background .3s; }
+  .mtx i.hot { box-shadow: 0 0 0 .25cqw var(--or); } .mtx i.hot b { background: var(--or); }
 
   /* --- Szene Soundkarte --- */
   .map { position: relative; height: 100%; }
@@ -469,31 +518,43 @@
   // ---------------------------------------------------------------- Seiten und Kapitel
   const XLR = '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#2c2c33" stroke="#c9ced4" stroke-width="3"/><circle cx="32" cy="32" r="16" fill="#18181c"/><circle cx="25" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="39" cy="27" r="3.2" fill="#e7e9ec"/><circle cx="32" cy="40" r="3.2" fill="#e7e9ec"/><path d="M28 12 h8 v4 h-8 z" fill="#c9ced4"/></svg>';   // XLR-Buchse fuer die Soundkarte
   const P = [
-    { id: 'looper', ic: '◎', c: '#34c759', t: ['Looper', 'Looper'], d: ['Loopers as rings – record, overdub, stop, fade', 'Looper als Ringe – aufnehmen, Overdub, stoppen, blenden'],
-      one: ['Every looper in your set at a glance – and in your hand.', 'Jeder Looper im Set auf einen Blick – und unter der Hand.'],
-      ch: [['Rings tell you everything', 'Ringe sagen alles', 'Green plays, red records, blue overdubs – the dot runs with the loop.', 'Grün spielt, Rot nimmt auf, Blau overdubbt – der Punkt läuft mit dem Loop.'],
-        ['Tap instead of searching', 'Antippen statt suchen', 'Tap a ring: record, play, overdub. Stop waits for the loop end.', 'Ring antippen: aufnehmen, abspielen, overdubben. Stop wartet aufs Loop-Ende.'],
-        ['Fade and save', 'Blenden und speichern', 'Fade all loopers in or out – or save a loop as a clip in the session.', 'Alle Looper ein- und ausblenden – oder einen Loop als Clip in die Session speichern.'],
-        ['Hands free', 'Hände frei', 'nanoKONTROL2 and SPD-SX PRO drive the same loopers – no MIDI mapping.', 'nanoKONTROL2 und SPD-SX PRO bedienen dieselben Looper – ohne MIDI-Mapping.']] },
-    { id: 'clips', ic: '▦', c: '#0a84ff', t: ['Clips', 'Clips'], d: ['Session View, MC6 Pro, recording range and setlist', 'Session-Ansicht, MC6 Pro, Aufnahme-Bereich und Setlist'],
-      one: ['The whole Session View – recorded and launched by foot.', 'Die ganze Session-Ansicht – per Fuß aufgenommen und gestartet.'],
-      ch: [['The whole session', 'Die ganze Session', 'Every track and scene with clip names, live on every tablet.', 'Alle Spuren und Szenen mit Clipnamen, live auf jedem Tablet.'],
-        ['Recording range › … ‹', 'Aufnahme-Bereich › … ‹', 'Mark the tracks you record into – fades and faders follow the range.', 'Markiere die Spuren, in die du aufnimmst – Fades und Fader folgen dem Bereich.'],
-        ['MC6 Pro by foot', 'MC6 Pro per Fuß', 'Record, play, next scene – the MC6 shows track and scene on its display.', 'Aufnehmen, abspielen, nächste Szene – das MC6 zeigt Spur und Szene im Display.'],
-        ['Tempo per scene', 'Tempo je Szene', '“Chorus {140}” – the scene sets the tempo when it starts.', '„Chorus {140}“ – die Szene setzt beim Start das Tempo.']] },
-    { id: 'songs', ic: '☰', c: '#ff9f0a', t: ['Arrangement', 'Arrangement'], d: ['Setlist and sections – jump, loop, stop after song', 'Setlist und Abschnitte – springen, loopen, nach dem Song stoppen'],
-      one: ['Your set list, straight from the Live set.', 'Deine Setlist, direkt aus dem Live-Set.'],
-      ch: [['Setlist from locators', 'Setlist aus Locators', 'Songs and sections come from locators or scenes – reorder by drag.', 'Songs und Abschnitte kommen aus Locators oder Szenen – sortieren per Ziehen.'],
-        ['Sections as big buttons', 'Abschnitte als große Tasten', 'Tap: jump there, quantized. Hold: play from there.', 'Tippen: quantisiert hinspringen. Halten: von dort spielen.'],
-        ['Loop it, stop after', 'Loopen, danach stoppen', 'Loop a section until you move on – or stop at the end of the song.', 'Einen Abschnitt loopen, bis du weiterschaltest – oder am Songende stoppen.'],
-        ['Tempo from the name', 'Tempo aus dem Namen', '“Rehab 145bpm” – StageCase sets the tempo when the song starts.', '„Rehab 145bpm“ – StageCase setzt das Tempo, wenn der Song beginnt.']] },
-    { id: 'leadsheet', ic: '♪', c: '#ffd60a', cam: 0.33, t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard and notes – edit chords, text and sections', 'Text mit Akkorden, Griffbrett und Noten – Akkorde, Text und Abschnitte bearbeiten'],
-      one: ['The current song as a sheet that reads along – plus an editor for chords, text and sections, right on the timeline.', 'Der aktuelle Song als Blatt, das mitliest – dazu ein Editor für Akkorde, Text und Abschnitte direkt auf der Zeitleiste.'],
+    { id: 'songs', ic: '☰', c: '#ff9f0a', t: ['Arrangement', 'Arrangement'], d: ['Setlist, song editor and practice mode', 'Setlist, Song-Editor und Übungsmodus'],
+      one: ['Your set list and every song, straight from the Live set – play, edit, practise.', 'Deine Setlist und jeder Song, direkt aus dem Live-Set – spielen, bearbeiten, üben.'],
+      ch: [['Adjust the setlist', 'Setlist anpassen', 'Pick tonight’s songs, drag them into order, ＋ Song with a template – all in the Live set.', 'Songs für heute an- und abwählen, per Ziehen sortieren, ＋ Song mit Vorlage – alles im Live-Set.'],
+        ['Sections as big buttons', 'Abschnitte als große Tasten', 'Tap: jump there, quantized. Hold: loop it. Stop after song: Live waits at the next one.', 'Tippen: quantisiert hinspringen. Halten: loopen. Nach dem Song stoppen: Live wartet am nächsten.'],
+        ['Edit the arrangement', 'Arrangement bearbeiten', 'The whole song at a glance: sections, chords, lyrics, loopers, light and kits – drag borders, split, rename.', 'Der ganze Song auf einen Blick: Abschnitte, Akkorde, Text, Looper, Licht und Kits – Ränder ziehen, teilen, umbenennen.'],
+        ['Practice mode', 'Übungsmodus', 'Pick the sections, add one or two bars of count-in – StageCase loops them. Or build a rehearsal mix from several songs.', 'Abschnitte wählen, ein oder zwei Takte Einzähler dazu – StageCase loopt sie. Oder einen Probe-Mix aus mehreren Songs bauen.']] },
+    { id: 'leadsheet', ic: '♪', c: '#ffd60a', cam: 0.33, t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard, notes and your own comments', 'Text mit Akkorden, Griffbrett, Noten und eigenen Kommentaren'],
+      one: ['The current song as a sheet that reads along – with chords, fretboard, notes and comments for every musician.', 'Der aktuelle Song als Blatt, das mitliest – mit Akkorden, Griffbrett, Noten und Kommentaren für jeden Musiker.'],
       ch: [['Reads along', 'Liest mit', 'The line being played is highlighted – tap a line to jump there.', 'Die gespielte Zeile ist hinterlegt – Tipp auf eine Zeile springt hin.'],
         ['Chords and transposing', 'Akkorde und Transponieren', 'Chords from the lyrics or a +Chords track – ♭ ♯ moves them per song, and the chord track in Live plays along.', 'Akkorde aus dem Text oder einer +Chords-Spur – ♭ ♯ verschiebt sie je Song, und die Akkordspur in Live spielt mit.'],
-        ['Fretboard', 'Griffbrett', 'Now, next, then – the shape flashes when the chord changes.', 'Jetzt, danach, dann – der Griff blitzt beim Wechsel auf.'],
-        ['Notes for your instrument', 'Noten fürs Instrument', 'A +NOTES track becomes sheet music, three bars ahead.', 'Eine +NOTES-Spur wird zu Noten, drei Takte voraus.']] },
-    { id: 'mixer', ic: '🎚', c: '#bf5af2', t: ['Mixer', 'Mixer'], d: ['Faders, mute, guide tracks and presets', 'Fader, Stumm, Guide-Spuren und Presets'],
+        ['Personal comments', 'Persönliche Kommentare', 'Everyone picks their name and writes notes above any line – “breathe here”, “drums out”. Saved in the Live set.', 'Jeder wählt seinen Namen und schreibt Notizen über jede Zeile – „hier atmen“, „Drums raus“. Gespeichert im Live-Set.'],
+        ['Fretboard and notes', 'Griffbrett und Noten', 'Now, next, then on the fretboard – a +NOTES track becomes sheet music, three bars ahead.', 'Jetzt, danach, dann auf dem Griffbrett – eine +NOTES-Spur wird zu Noten, drei Takte voraus.']] },
+    { id: 'monitor', ic: '🎧', c: '#5e5ce6', badge: 'neu', t: ['Monitor mixer', 'Monitor-Mixer'], d: ['Everyone sets their own in-ear mix – Soundcraft Ui, PreSonus StudioLive', 'Jeder stellt seinen In-Ear-Mix selbst – Soundcraft Ui, PreSonus StudioLive'],
+      one: ['Everyone mixes their own monitor – on their own phone, no Live needed.', 'Jeder mischt seinen Monitor selbst – auf dem eigenen Handy, ganz ohne Live.'],
+      ch: [['Pick your mix', 'Deinen Mix wählen', 'Each musician opens the page on their tablet or phone and picks their monitor mix.', 'Jeder Musiker öffnet die Seite auf Tablet oder Handy und wählt seinen Monitor-Mix.'],
+        ['More me', 'Mehr ich', 'Set the share of every channel, aux input and FX return yourself – the names come from the desk.', 'Die Anteile jedes Kanals, Aux-Eingangs und FX-Returns selbst stellen – die Namen kommen vom Pult.'],
+        ['Your desk', 'Dein Pult', 'Soundcraft Ui24R, Ui16, Ui12 and PreSonus StudioLive Series III – found on the network, reconnected by itself.', 'Soundcraft Ui24R, Ui16, Ui12 und PreSonus StudioLive Series III – im Netz gefunden, nach einem Abbruch von selbst neu verbunden.'],
+        ['Desk view', 'Pult-Ansicht', 'Every mix as the desk sees it – whatever comes from StageCase lights up orange.', 'Alle Mixe so, wie das Pult sie sieht – was von StageCase kommt, leuchtet orange auf.']] },
+    { id: 'drums', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><path d="M14 18 L4 4 M50 18 L60 4" stroke="#e8c9a0" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="32" cy="26" rx="24" ry="8" fill="#e7e9ec"/><path d="M8 26 V46 A24 8 0 0 0 56 46 V26 A24 8 0 0 1 8 26 Z" fill="#ff375f"/><path d="M8 30 L18 50 L28 32 L38 52 L48 32 L56 46" fill="none" stroke="#c9ced4" stroke-width="2"/><ellipse cx="32" cy="26" rx="24" ry="8" fill="none" stroke="#9ea4ab" stroke-width="2"/></svg>', c: '#ff6482', badge: 'neu', t: ['Devices', 'Geräte'], d: ['Drum kits and amp slots per song – Roland V-Drums, SPD-SX PRO, Kemper', 'Drum-Kits und Amp-Slots je Song – Roland V-Drums, SPD-SX PRO, Kemper'],
+      one: ['The right sound for every song – the arrangement switches kits and amp slots.', 'Der passende Sound zu jedem Song – das Arrangement schaltet Kits und Amp-Slots um.'],
+      ch: [['Kits at a tap', 'Kits auf einen Tipp', 'StageCase reads the kit names from your module – tap one and the module switches.', 'StageCase liest die Kitnamen aus deinem Modul – antippen, und das Modul schaltet um.'],
+        ['Kit per song and section', 'Kit je Song und Abschnitt', 'Put a kit on the start of a song or on a section – saved in the Live set.', 'Ein Kit auf den Songanfang oder einen Abschnitt legen – gespeichert im Live-Set.'],
+        ['Follows the song', 'Folgt dem Song', 'Brushes in the verse, the big kit in the chorus – the kit stays until a later section sets another.', 'Besen in der Strophe, das große Kit im Refrain – ein Kit bleibt, bis ein späterer Abschnitt ein anderes setzt.'],
+        ['Your devices', 'Deine Geräte', 'TD-07 to TD-50X and SPD-SX PRO via USB, the TD-20 via MIDI, the Kemper Profiler with performances and slots.', 'TD-07 bis TD-50X und SPD-SX PRO per USB, der TD-20 über MIDI, der Kemper Profiler mit Performances und Slots.']] },
+    { id: 'lights', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a" stop-opacity=".95"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></linearGradient></defs><path d="M24 22 L8 60 H56 L40 22 Z" fill="url(#lb)"/><rect x="20" y="8" width="24" height="16" rx="4" fill="#3a3a42" stroke="#c9ced4" stroke-width="2"/><circle cx="32" cy="22" r="6" fill="#fff6c8"/><path d="M14 16 H20 M44 16 H50" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#ffd60a', badge: 'pre', t: ['Lights', 'Lights'], d: ['Lightkey cues per section – they follow the song', 'Lightkey-Cues je Abschnitt – sie folgen dem Song'],
+      one: ['Your light show follows the song – no clips in Live needed.', 'Deine Lichtshow folgt dem Song – ohne Clips in Live.'],
+      ch: [['Lightkey cues as buttons', 'Lightkey-Cues als Tasten', 'Your Lightkey Live Triggers become pages and cue buttons in their clip colours.', 'Deine Lightkey Live Triggers werden zu Seiten und Cue-Tasten in ihren Clipfarben.'],
+        ['Light per section', 'Licht je Abschnitt', 'Tap a section, then a cue – saved in the Live set.', 'Abschnitt antippen, dann einen Cue – gespeichert im Live-Set.'],
+        ['Follows the song', 'Folgt dem Song', 'Verse, chorus, solo – the light switches with the section, even when you jump or loop.', 'Strophe, Refrain, Solo – das Licht schaltet mit dem Abschnitt, auch beim Springen und Loopen.'],
+        ['Several cues at once', 'Mehrere Cues zugleich', 'Colour, movement and effect from different pages – one section, one look.', 'Farbe, Bewegung und Effekt von verschiedenen Seiten – ein Abschnitt, ein Bild.']] },
+    { id: 'midi', ic: '🎹', c: '#ff375f', t: ['MIDI mapping', 'MIDI-Zuordnung'], d: ['Put the top bar on your controller', 'Die obere Leiste auf deinen Controller legen'],
+      one: ['Any button in StageCase on any key of your controller.', 'Jede Taste in StageCase auf jede Taste deines Controllers.'],
+      ch: [['Click a button', 'Taste anklicken', 'Play, stop, tap tempo, fades, mute – everything is learnable.', 'Play, Stop, Tap-Tempo, Fades, Stumm – alles lernbar.'],
+        ['Press a key', 'Taste drücken', 'Press any note or CC on your controller – done.', 'Eine Note oder einen CC am Controller drücken – fertig.'],
+        ['Songs and sections too', 'Auch Songs und Abschnitte', 'Put a song or a section on a pad and jump there.', 'Einen Song oder Abschnitt auf ein Pad legen und hinspringen.'],
+        ['One connection', 'Ein Anschluss', 'nanoKONTROL2, MC6 Pro, SPD-SX PRO and LPD8 reach Live through the “Stagecase” port.', 'nanoKONTROL2, MC6 Pro, SPD-SX PRO und LPD8 kommen über den Anschluss „Stagecase“ in Live an.']] },
+    { id: 'mixer', ic: '🎚', c: '#bf5af2', t: ['Ableton mixer', 'Ableton-Mixer'], d: ['Faders, mute, guide tracks and presets', 'Fader, Stumm, Guide-Spuren und Presets'],
       one: ['Just the faders you need on stage.', 'Nur die Fader, die du auf der Bühne brauchst.'],
       ch: [['Faders for +G: tracks', 'Fader für +G:-Spuren', 'Mark tracks with “+G:” and they appear here – on every device.', 'Spuren mit „+G:“ markieren, schon stehen sie hier – auf jedem Gerät.'],
         ['Mute buttons on top', 'Stumm-Tasten oben', 'Pin up to four mute buttons into the top bar of every page.', 'Bis zu vier Stumm-Tasten in die obere Leiste jeder Seite heften.'],
@@ -505,24 +566,18 @@
         ['Presets per interface', 'Presets je Soundkarte', 'Rehearsal room, club, festival – each interface gets its routing.', 'Proberaum, Club, Festival – jede Soundkarte bekommt ihr Routing.'],
         ['Compare, then apply', 'Vergleichen, dann anwenden', 'StageCase shows what would change – yellow – before it touches Live.', 'StageCase zeigt gelb, was sich ändern würde – bevor es Live anfasst.'],
         ['Arrange freely', 'Frei anordnen', 'Drag boxes into place – V, Ctrl or ⌥ – saved in the set.', 'Boxen an ihren Platz ziehen – V, Ctrl oder ⌥ – im Set gespeichert.']] },
-    { id: 'midi', ic: '🎹', c: '#ff375f', t: ['MIDI mapping', 'MIDI-Zuordnung'], d: ['Put the top bar on your controller', 'Die obere Leiste auf deinen Controller legen'],
-      one: ['Any button in StageCase on any key of your controller.', 'Jede Taste in StageCase auf jede Taste deines Controllers.'],
-      ch: [['Click a button', 'Taste anklicken', 'Play, stop, tap tempo, fades, mute – everything is learnable.', 'Play, Stop, Tap-Tempo, Fades, Stumm – alles lernbar.'],
-        ['Press a key', 'Taste drücken', 'Press any note or CC on your controller – done.', 'Eine Note oder einen CC am Controller drücken – fertig.'],
-        ['Songs and sections too', 'Auch Songs und Abschnitte', 'Put a song or a section on a pad and jump there.', 'Einen Song oder Abschnitt auf ein Pad legen und hinspringen.'],
-        ['One connection', 'Ein Anschluss', 'All controllers reach Live through the “Stagecase” port.', 'Alle Controller kommen über den Anschluss „Stagecase“ in Live an.']] },
-    { id: 'lights', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><defs><linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a" stop-opacity=".95"/><stop offset="1" stop-color="#ffe27a" stop-opacity="0"/></linearGradient></defs><path d="M24 22 L8 60 H56 L40 22 Z" fill="url(#lb)"/><rect x="20" y="8" width="24" height="16" rx="4" fill="#3a3a42" stroke="#c9ced4" stroke-width="2"/><circle cx="32" cy="22" r="6" fill="#fff6c8"/><path d="M14 16 H20 M44 16 H50" stroke="#c9ced4" stroke-width="3" stroke-linecap="round"/></svg>', c: '#ffd60a', badge: 'pre', t: ['Lights', 'Lights'], d: ['Lightkey cues per section – they follow the song', 'Lightkey-Cues je Abschnitt – sie folgen dem Song'],
-      one: ['Your light show follows the song – no clips in Live needed.', 'Deine Lichtshow folgt dem Song – ohne Clips in Live.'],
-      ch: [['Lightkey cues as buttons', 'Lightkey-Cues als Tasten', 'Your Lightkey Live Triggers become pages and cue buttons in their clip colours.', 'Deine Lightkey Live Triggers werden zu Seiten und Cue-Tasten in ihren Clipfarben.'],
-        ['Light per section', 'Licht je Abschnitt', 'Tap a section, then a cue – saved in the Live set.', 'Abschnitt antippen, dann einen Cue – gespeichert im Live-Set.'],
-        ['Follows the song', 'Folgt dem Song', 'Verse, chorus, solo – the light switches with the section, even when you jump or loop.', 'Strophe, Refrain, Solo – das Licht schaltet mit dem Abschnitt, auch beim Springen und Loopen.'],
-        ['Several cues at once', 'Mehrere Cues zugleich', 'Colour, movement and effect from different pages – one section, one look.', 'Farbe, Bewegung und Effekt von verschiedenen Seiten – ein Abschnitt, ein Bild.']] },
-    { id: 'drums', ic: '<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em" aria-hidden="true"><path d="M14 18 L4 4 M50 18 L60 4" stroke="#e8c9a0" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="32" cy="26" rx="24" ry="8" fill="#e7e9ec"/><path d="M8 26 V46 A24 8 0 0 0 56 46 V26 A24 8 0 0 1 8 26 Z" fill="#ff375f"/><path d="M8 30 L18 50 L28 32 L38 52 L48 32 L56 46" fill="none" stroke="#c9ced4" stroke-width="2"/><ellipse cx="32" cy="26" rx="24" ry="8" fill="none" stroke="#9ea4ab" stroke-width="2"/></svg>', c: '#ff6482', badge: 'neu', t: ['Drums', 'Drums'], d: ['E-drum kits per song and section – Roland V-Drums, SPD-SX PRO', 'E-Drum-Kits je Song und Abschnitt – Roland V-Drums, SPD-SX PRO'],
-      one: ['The right kit for every song – switched by the arrangement.', 'Das passende Kit zu jedem Song – das Arrangement schaltet um.'],
-      ch: [['Kits at a tap', 'Kits auf einen Tipp', 'StageCase reads the kit names from your module – tap one and the module switches.', 'StageCase liest die Kitnamen aus deinem Modul – antippen, und das Modul schaltet um.'],
-        ['Kit per song and section', 'Kit je Song und Abschnitt', 'Put a kit on the start of a song or on a section – saved in the Live set.', 'Ein Kit auf den Songanfang oder einen Abschnitt legen – gespeichert im Live-Set.'],
-        ['Follows the song', 'Folgt dem Song', 'Brushes in the verse, the big kit in the chorus – the kit stays until a later section sets another.', 'Besen in der Strophe, das große Kit im Refrain – ein Kit bleibt, bis ein späterer Abschnitt ein anderes setzt.'],
-        ['Your module', 'Dein Modul', 'TD-07, TD-17, TD-27, TD-50 and SPD-SX PRO via USB – the TD-20 and others via a MIDI interface. Favourites with a star.', 'TD-07, TD-17, TD-27, TD-50 und SPD-SX PRO per USB – TD-20 und Co. über ein MIDI-Interface. Favoriten mit Stern.']] },
+    { id: 'clips', ic: '▦', c: '#0a84ff', t: ['Clips', 'Clips'], d: ['Session View, MC6 Pro, recording range and setlist', 'Session-Ansicht, MC6 Pro, Aufnahme-Bereich und Setlist'],
+      one: ['The whole Session View – recorded and launched by foot.', 'Die ganze Session-Ansicht – per Fuß aufgenommen und gestartet.'],
+      ch: [['The whole session', 'Die ganze Session', 'Every track and scene with clip names, live on every tablet.', 'Alle Spuren und Szenen mit Clipnamen, live auf jedem Tablet.'],
+        ['Recording range › … ‹', 'Aufnahme-Bereich › … ‹', 'Mark the tracks you record into – fades and faders follow the range.', 'Markiere die Spuren, in die du aufnimmst – Fades und Fader folgen dem Bereich.'],
+        ['MC6 Pro by foot', 'MC6 Pro per Fuß', 'Record, play, next scene – the MC6 shows track and scene on its display.', 'Aufnehmen, abspielen, nächste Szene – das MC6 zeigt Spur und Szene im Display.'],
+        ['Tempo per scene', 'Tempo je Szene', '“Chorus {140}” – the scene sets the tempo when it starts.', '„Chorus {140}“ – die Szene setzt beim Start das Tempo.']] },
+    { id: 'looper', ic: '◎', c: '#34c759', t: ['Looper', 'Looper'], d: ['Loopers as rings – record, overdub, stop, fade', 'Looper als Ringe – aufnehmen, Overdub, stoppen, blenden'],
+      one: ['Every looper in your set at a glance – and in your hand.', 'Jeder Looper im Set auf einen Blick – und unter der Hand.'],
+      ch: [['Rings tell you everything', 'Ringe sagen alles', 'Green plays, red records, blue overdubs – the dot runs with the loop.', 'Grün spielt, Rot nimmt auf, Blau overdubbt – der Punkt läuft mit dem Loop.'],
+        ['Tap instead of searching', 'Antippen statt suchen', 'Tap a ring: record, play, overdub. Stop waits for the loop end.', 'Ring antippen: aufnehmen, abspielen, overdubben. Stop wartet aufs Loop-Ende.'],
+        ['Fade and save', 'Blenden und speichern', 'Fade all loopers in or out – or save a loop as a clip in the session.', 'Alle Looper ein- und ausblenden – oder einen Loop als Clip in die Session speichern.'],
+        ['Hands free', 'Hände frei', 'nanoKONTROL2 and SPD-SX PRO drive the same loopers – no MIDI mapping.', 'nanoKONTROL2 und SPD-SX PRO bedienen dieselben Looper – ohne MIDI-Mapping.']] },
     { id: 'help', ic: '❓', c: '#8e8e93', t: ['Help', 'Hilfe'], d: ['Setup, every page, search', 'Einrichtung, alle Seiten, Suche'],
       one: ['Built in – and it knows where you are.', 'Eingebaut – und sie weiß, wo du gerade bist.'],
       ch: [['Search', 'Suche', 'Type a word, get the right section.', 'Ein Wort tippen, den passenden Abschnitt finden.'],
@@ -592,36 +647,63 @@
         if (s === 3) later(700, () => { for (let c = 0; c < 7; c++) { const e = cell(2, c); if (e.classList.contains('f') || c < 3) { e.classList.add('f', 'p'); } } [0, 1].forEach((c) => cell(0, c).classList.remove('p')); });
       } },
     songs: {
-      html: () => `<div class="songs"><div class="sl" id="sl">${[['Opener', '3:40', '#ff375f'], ['Rehab', '3:35', '#ff9f0a'], ['Sundown', '4:10', '#34c759'], ['Valley Road', '5:02', '#0a84ff'], ['Encore', '2:58', '#bf5af2']].map((x, i) => `<div style="--sc:${x[2]}"${i === 1 ? ' class="cur"' : ''}><span>${i + 1} ${x[0]}</span><small>${x[1]}</small></div>`).join('')}</div>
+      html: () => {
+        const S = [['Intro', 2, '#8e8e93'], ['Verse', 4, '#34c759'], ['Chorus', 4, '#ff3b30'], ['Verse 2', 4, '#34c759'], ['Solo', 3, '#ff9f0a'], ['Outro', 2, '#8e8e93']];
+        const lane = (lb, inner, cls) => `<div class="edr"><b>${lb}</b><div class="lane ${cls || ''}">${inner}</div></div>`;
+        const m = (x, t, cls, q) => `<i class="m ${cls || ''}" style="left:${x}%${q ? `;--q:${q}` : ''}">${t}</i>`;
+        return `<div class="songs"><div class="slw"><div class="sl" id="sl">${[['Opener', '3:40', '#ff375f'], ['Rehab', '3:35', '#ff9f0a'], ['Sundown', '4:10', '#34c759'], ['Valley Road', '5:02', '#0a84ff'], ['Encore', '2:58', '#bf5af2']].map((x, i) => `<div data-o="${i}" style="--sc:${x[2]}"${i === 1 ? ' class="cur"' : ''}><span><i class="ck">✓</i>${x[0]}</span><small>${x[1]}</small></div>`).join('')}</div><div class="add" id="addS">＋ Song</div></div>
         <div class="cs"><div class="tt">Rehab<small>· <span class="bpm" id="bpm">♩ 145</span></small></div><div class="prog"><i id="prog"></i></div>
-        <div class="secs" id="secs">${[['Intro', '#8e8e93'], ['Verse', '#34c759'], ['Chorus', '#ff3b30'], ['Verse 2', '#34c759'], ['Solo', '#ff9f0a'], ['Outro', '#8e8e93']].map((x) => `<div style="--sc:${x[1]}">${x[0]}</div>`).join('')}</div>
-        <div class="stopb" id="stopb">■ Stop after song</div></div></div><div class="tap" id="tap"></div>`,
+        <div class="secs" id="secs">${S.map((x) => `<div style="--sc:${x[2]}">${x[0]}</div>`).join('')}<span class="pk"><b id="pkL"></b><em>⟳</em></span></div>
+        <div class="btns" id="btns"><div class="stopb" id="stopb">■ ${de ? 'Nach dem Song stoppen' : 'Stop after song'}</div><div class="pracb">🎯 ${de ? 'Üben' : 'Practise'}</div><div class="startb" id="startb">▶ ${de ? 'Starten' : 'Start'}</div></div></div>
+        <div class="ed"><div class="edh">✎ ${de ? 'Song bearbeiten' : 'Edit song'} · Rehab<span>▤ ⊞ ⊟ ↶ ⚡</span></div><div class="edw">
+          ${lane(de ? 'Abschnitte' : 'Sections', S.map((x) => `<i style="flex-grow:${x[1]};--sc:${x[2]}">${x[0]}</i>`).join(''), 'sx" id="edS')}
+          ${lane(de ? 'Akkorde' : 'Chords', 'Am F C G Am F C G Dm Am E Am'.split(' ').map((c) => `<i>${c}</i>`).join(''), 'cd')}
+          ${lane('Text', m(12, 'Woke up this morning …', 't') + m(34, 'Hold on, hold on', 't') + m(56, 'Same old road …', 't'))}
+          ${lane('Looper', m(11, '● 1') + m(32, '▶ 1  ● 2') + m(56, '⊕ 2') + m(78, '▶ 1 2') + m(92, '■'))}
+          ${lane('Lights', m(1, '', 'dot', '#ff9f0a') + m(11, '', 'dot', '#0a84ff') + m(32, '', 'dot', '#ff3b30') + m(53, '', 'dot', '#0a84ff') + m(74, '', 'dot', '#bf5af2'))}
+          ${lane('Drums', m(1, 'Studio') + m(11, 'Brushes') + m(32, 'Rock Arena') + m(53, 'Brushes'))}
+          <i class="edp" id="edP"></i></div></div></div><div class="tap" id="tap"></div>`;
+      },
       step(s) {
-        const secs = $('secs').children; for (const e of secs) e.classList.remove('cur', 'loop');
-        secs[s === 0 ? 0 : s === 1 ? 2 : s === 2 ? 4 : 1].classList.add('cur');
-        $('stopb').classList.toggle('on', s === 2); $('prog').style.width = ['12%', '42%', '68%', '8%'][s];
-        if (s === 0) later(800, () => { const sl = $('sl').children; sl[1].classList.remove('cur'); sl[2].classList.add('cur'); later(1200, () => { sl[2].classList.remove('cur'); sl[1].classList.add('cur'); }); });
-        if (s === 1) later(700, () => tapAt('secs', 2));
-        if (s === 2) later(600, () => secs[4].classList.add('loop'));
-        if (s === 3) later(900, () => { $('bpm').textContent = '♩ 120'; $('bpm').classList.add('pop'); later(300, () => $('bpm').classList.remove('pop')); later(1400, () => { $('bpm').textContent = '♩ 145'; }); });
+        const scn = $('scn'); scn.classList.toggle('edit', s === 2); scn.classList.toggle('prac', s === 3);
+        const secs = $('secs').children; for (const e of [...secs].slice(0, 6)) e.classList.remove('cur', 'loop');
+        const sl = $('sl'); [...sl.children].sort((a, b) => a.dataset.o - b.dataset.o).forEach((e) => { e.classList.remove('off', 'drag'); sl.appendChild(e); });
+        $('addS').classList.remove('hot'); $('stopb').classList.remove('on'); $('startb').classList.remove('go');
+        const ed = $('edS').children; ed[1].style.flexGrow = 4; ed[2].style.flexGrow = 4; ed[1].classList.remove('grab'); $('edP').style.left = '26%';
+        $('prog').style.width = ['12%', '42%', '42%', '20%'][s];
+        if (s === 0) { secs[0].classList.add('cur');
+          later(600, () => { tapAt('sl', 4); sl.children[4].classList.add('off'); });
+          later(1500, () => { const v = sl.children[3]; v.classList.add('drag'); later(450, () => { sl.insertBefore(v, sl.children[2]); later(300, () => v.classList.remove('drag')); }); });
+          later(2800, () => { $('addS').classList.add('hot'); }); }
+        if (s === 1) { later(500, () => { tapAt('secs', 2); secs[2].classList.add('cur'); });
+          later(1600, () => { tapAt('secs', 4); secs[2].classList.remove('cur'); secs[4].classList.add('cur', 'loop'); });
+          later(2700, () => $('stopb').classList.add('on')); }
+        if (s === 2) { later(900, () => ed[1].classList.add('grab')); later(1300, () => { ed[1].style.flexGrow = 6; ed[2].style.flexGrow = 2; });
+          later(2300, () => { ed[1].classList.remove('grab'); $('edP').style.left = '70%'; }); }
+        if (s === 3) { const pk = $('pkL'); pk.textContent = de ? '+1 Takt' : '+1 bar'; secs[1].classList.add('cur'); secs[2].classList.add('cur');
+          later(1200, () => { pk.textContent = de ? '+2 Takte' : '+2 bars'; });
+          later(2100, () => { tapAt('btns', 2); $('startb').classList.add('go'); $('prog').style.width = '64%'; }); }
       } },
     leadsheet: {
       html: () => `<div class="ls"><div class="paper" id="paper"><h4>Sundown</h4><div class="sec">VERSE 1</div>
         ${[['Em G D A', 'Lights go down and the room is ready'], ['Em G D A', 'hands on the sticks and the loop is steady'], ['C D Em', 'one more time around the line']].map((l, i) => `<div class="ln" data-i="${i}"><span class="ch">${l[0]}</span>${l[1]}</div>`).join('')}
         <div class="sec">CHORUS</div><div class="ln" data-i="3"><span class="ch">C D G</span>and we are home</div></div>
-        <div class="side"><div class="trp">♭ <b id="trv">±0</b> ♯</div><div class="fb"><div class="n">Jetzt <b id="chn">Em</b></div><div class="frets" id="frets"><i style="left:30%;top:60%"></i><i style="left:30%;top:42%"></i></div></div>
+        <div class="side"><div class="who" id="who">👤 Anna</div><div class="trp">♭ <b id="trv">±0</b> ♯</div><div class="fb"><div class="n">Jetzt <b id="chn">Em</b></div><div class="frets" id="frets"><i style="left:30%;top:60%"></i><i style="left:30%;top:42%"></i></div></div>
         <div class="staff" id="staff"><b></b>${[12, 26, 40, 54, 68, 82].map((x, i) => `<i style="left:${x}%;top:${[52, 44, 36, 44, 60, 40][i]}%"></i>`).join('')}</div></div></div>`,
       step(s) {
         const lines = $('paper').querySelectorAll('.ln'); lines.forEach((l) => l.classList.remove('cur'));
-        $('scn').classList.toggle('notes', s === 3);
+        $('scn').classList.toggle('notes', s === 3); $('who').classList.toggle('on', s === 2);
+        for (const c of $('paper').querySelectorAll('.cm')) c.remove();
+        const note = (i, t) => { const c = document.createElement('span'); c.className = 'cm'; c.innerHTML = '<b>Anna</b>'; lines[i].appendChild(c); later(30, () => c.classList.add('on'));
+          for (let k = 1; k <= t.length; k++) later(60 + 70 * k, () => { c.innerHTML = '<b>Anna</b>' + esc(t.slice(0, k)); }); };
         const hl = (i) => { lines.forEach((l) => l.classList.remove('cur')); lines[i] && lines[i].classList.add('cur'); };
         if (s === 0) { hl(0); later(1300, () => hl(1)); later(2600, () => hl(2)); }
         if (s === 1) { hl(1); later(900, () => { $('trv').textContent = '+2'; for (const c of $('paper').querySelectorAll('.ch')) c.textContent = c.textContent.replace(/Em/g, 'F#m').replace(/\bG\b/g, 'A').replace(/\bD\b/g, 'E').replace(/\bA\b/g, 'B').replace(/\bC\b/g, 'D'); $('chn').textContent = 'F#m'; }); }
         else { $('trv').textContent = '±0'; const orig = ['Em G D A', 'Em G D A', 'C D Em', 'C D G']; $('paper').querySelectorAll('.ch').forEach((c, i) => { c.textContent = orig[i]; }); $('chn').textContent = 'Em'; }
-        if (s === 2) { hl(2); const f = $('frets').children; const shapes = [['30%', '60%', '30%', '42%'], ['55%', '25%', '30%', '80%'], ['55%', '42%', '80%', '25%']]; let k = 0;
+        if (s === 2) { hl(1); later(500, () => { tapAt('paper', 3); note(1, de ? '✎ hier atmen' : '✎ breathe here'); }); later(2200, () => { tapAt('paper', 6); note(3, de ? '✎ Drums raus' : '✎ drums out'); }); }
+        if (s === 3) { hl(2); const f = $('frets').children; const shapes = [['30%', '60%', '30%', '42%'], ['55%', '25%', '30%', '80%'], ['55%', '42%', '80%', '25%']]; let k = 0;
           const go = () => { const sh = shapes[k % 3]; f[0].style.left = sh[0]; f[0].style.top = sh[1]; f[1].style.left = sh[2]; f[1].style.top = sh[3]; $('chn').textContent = ['Em', 'G', 'D'][k % 3]; k++; };
           go(); later(1300, go); later(2600, go); }
-        if (s === 3) hl(3);
       } },
     mixer: {
       html: () => `<div class="mx" id="mx">${[['DRUMS', '#ff9f0a', 30], ['BASS', '#34c759', 40], ['KEYS', '#0a84ff', 35], ['VOX', '#ff375f', 25], ['CLICK', '#8e8e93', 50], ['GUIDE', '#ffd60a', 45]].map((x, i) => `<div class="st${i === 5 ? ' guide' : ''}" style="--sc:${x[1]}"><div class="nm">${x[0]}</div><div class="tr"><div class="kn" style="top:${x[2]}%"></div></div><div class="mu">M</div></div>`).join('')}</div>
@@ -633,6 +715,29 @@
         if (s === 1) { later(600, () => mu(4, true)); later(1600, () => mu(4, false)); later(2300, () => mu(4, true)); }
         if (s === 2) { later(500, () => mu(5, true)); later(1800, () => mu(5, false)); }
         if (s === 3) { const p = $('pre').children; later(700, () => { p[0].classList.remove('on'); p[1].classList.add('on'); [22, 30, 28, 18, 60, 70].forEach((v, i) => kn(i, v)); }); later(2300, () => { p[1].classList.remove('on'); p[2].classList.add('on'); [12, 20, 24, 10, 55, 80].forEach((v, i) => kn(i, v)); }); }
+      } },
+    monitor: {
+      html: () => `<div class="mon"><div class="phn"><div class="mtabs" id="mtabs">${['IEM 1 · Drums', 'IEM 2 · Bass', 'IEM 3 · Vox'].map((t, i) => `<i${i === 0 ? ' class="on"' : ''}>${t}</i>`).join('')}</div>
+        <div class="mx" id="mmx">${[['KICK', '#ff9f0a'], ['BASS', '#34c759'], ['GTR', '#0a84ff'], ['VOX', '#ff375f'], ['CLICK', '#8e8e93'], ['FX', '#bf5af2']].map((x) => `<div class="st" style="--sc:${x[1]}"><div class="nm">${x[0]}</div><div class="tr"><div class="kn" style="top:50%"></div></div><div class="mu">M</div></div>`).join('')}</div></div>
+        <div class="desk"><div class="brand2" id="mBrand"><i class="on">Soundcraft Ui</i><i>StudioLive III</i></div><div class="conn" id="conn"></div>
+        <div class="mtx" id="mtx"><span></span>${['KICK', 'BASS', 'GTR', 'VOX', 'CLK', 'FX'].map((c) => `<em>${c}</em>`).join('')}${['IEM 1', 'IEM 2', 'IEM 3'].map((r) => `<span>${r}</span>` + '<i><b></b></i>'.repeat(6)).join('')}</div></div></div><div class="tap" id="tap"></div>`,
+      step(s) {
+        const MV = [[20, 40, 55, 45, 30, 60], [45, 15, 50, 40, 35, 60], [40, 45, 50, 40, 50, 40]].map((r) => r.slice());
+        const st = $('mmx').children, tabs = $('mtabs').children, cells = $('mtx').querySelectorAll('i'), br = $('mBrand').children, conn = $('conn');
+        let mix = 0;
+        const paint = () => { MV.forEach((r, m) => r.forEach((v, c) => { cells[m * 6 + c].firstChild.style.height = (100 - v) + '%'; }));
+          MV[mix].forEach((v, c) => { st[c].querySelector('.kn').style.top = v + '%'; }); };
+        const tab = (k) => { mix = k; for (const t of tabs) t.classList.remove('on'); tabs[k].classList.add('on'); paint(); };
+        const set = (c, v) => { MV[mix][c] = v; paint(); const e = cells[mix * 6 + c]; e.classList.add('hot'); later(900, () => e.classList.remove('hot')); };
+        const brand = (k) => { for (const b of br) b.classList.remove('on'); br[k].classList.add('on'); };
+        for (const e of st) e.querySelector('.mu').classList.remove('on'); for (const e of cells) e.classList.remove('hot');
+        brand(0); conn.className = 'conn'; conn.textContent = (de ? '● verbunden · ' : '● connected · ') + 'Ui24R · 10.10.1.1';
+        tab(s === 0 ? 0 : 2);
+        if (s === 0) { later(700, () => { tapAt('mtabs', 1); tab(1); }); later(2100, () => { tapAt('mtabs', 2); tab(2); }); }
+        if (s === 1) { later(600, () => set(3, 12)); later(1500, () => set(4, 70)); later(2400, () => { st[5].querySelector('.mu').classList.add('on'); set(5, 100); }); }
+        if (s === 2) { later(600, () => { brand(1); conn.className = 'conn wait'; conn.textContent = de ? 'Im Netz suchen …' : 'Searching the network …'; });
+          later(2000, () => { conn.className = 'conn'; conn.textContent = (de ? '● verbunden · ' : '● connected · ') + 'StudioLive 32R · 192.168.1.40'; }); }
+        if (s === 3) { later(500, () => { tab(0); set(4, 15); }); later(1400, () => { tab(1); set(1, 8); }); later(2300, () => { tab(2); set(3, 10); }); }
       } },
     mapping: {
       html: () => `<div class="map" id="map"><div class="tabs" id="tabs"><i class="on">Babyface Pro</i><i>X32 Rack</i></div><div class="apply">✓ Anwenden</div>
@@ -650,7 +755,7 @@
     midi: {
       html: () => `<div class="mm"><div class="keys" id="keys">${['▶ / ■', '● REC', '⟲ LOOP', 'TAP', '◢ Fade In', '◣ Fade Out', 'Song: Rehab'].map((k) => `<i>${k}<span class="tag"></span></i>`).join('')}</div>
         <div class="dev"><div class="k" id="kk">${'12345678'.split('').map(() => '<i></i>').join('')}</div><span id="kt"></span></div>
-        <div class="hub"><span>nanoKONTROL2</span><span>MC6 Pro</span><span>SPD-SX PRO</span><span class="ar">→</span><span><b>Stagecase</b></span><span class="ar">→</span><span>Ableton Live</span></div></div>`,
+        <div class="hub"><span>nanoKONTROL2</span><span>MC6 Pro</span><span>SPD-SX PRO</span><span>LPD8</span><span class="ar">→</span><span><b>Stagecase</b></span><span class="ar">→</span><span>Ableton Live</span></div></div>`,
       step(s) {
         const k = $('keys').children, kk = $('kk').children;
         for (const e of k) e.classList.remove('wait', 'ok'); for (const e of kk) e.classList.remove('hot');
@@ -691,8 +796,8 @@
           later(2200, () => { secs[2].classList.remove('arm'); setNow(2); light(1, 'move'); cues[6].classList.add('on'); }); }
       } },
     drums: {
-      html: () => `<div class="dr"><div class="mod"><div class="modbox"><div class="brand">ROLAND · TD-27</div><div class="lcd" id="lcd"><div class="no" id="lcdNo">KIT 001</div><div class="kn" id="lcdKn">Studio Classic</div></div>
-        <div class="knobs"><i></i><b></b><i></i></div></div><div class="devs" id="devs"><i class="on">TD-27</i><i>SPD-SX PRO</i><i>TD-20 · MIDI</i></div></div>
+      html: () => `<div class="dr"><div class="mod"><div class="modbox"><div class="brand" id="drBrand">ROLAND · TD-27</div><div class="lcd" id="lcd"><div class="no" id="lcdNo">KIT 001</div><div class="kn" id="lcdKn">Studio Classic</div></div>
+        <div class="knobs"><i></i><b></b><i></i></div></div><div class="devs" id="devs"><i class="on">TD-27</i><i>SPD-SX PRO</i><i>TD-20 · MIDI</i><i>Kemper</i></div></div>
         <div class="drp"><div class="kits" id="kits">${[['001', 'Studio Classic'], ['002', 'Brushes Jazz'], ['003', 'Rock Arena'], ['004', 'Funk Tight'], ['005', 'Electro 808'], ['006', 'Latin Perc']].map((k, i) => `<i><small>${k[0]}</small>${k[1]}<em${i === 1 || i === 2 ? ' class="fav"' : ''}>${i === 1 || i === 2 ? '★' : '☆'}</em></i>`).join('')}</div>
         <div class="dtitle">Golden Hour</div><div class="dsong" id="dsong">${['Start', 'Intro', 'Verse', 'Chorus', 'Songende'].map((n, i) => `<div class="${i === 0 ? 's' : i === 4 ? 'e' : ''}">${n}</div>`).join('')}</div></div></div><div class="tap" id="tap"></div>`,
       step(s) {
@@ -704,7 +809,7 @@
         const now = (c) => { for (const e of cells) e.classList.remove('now'); if (c != null) cells[c].classList.add('now'); };
         const dev = (k) => { for (const d of devs) d.classList.remove('on'); devs[k].classList.add('on'); };
         for (const e of cells) { e.classList.remove('arm', 'now'); const k = e.querySelector('.k'); if (k) k.remove(); }
-        dev(0); show(0);
+        dev(0); show(0); $('drBrand').textContent = 'ROLAND · TD-27';
         // Zuordnung: Start = Studio, Verse = Brushes, Chorus = Rock Arena; Intro erbt vom Start
         const preset = () => { put(0, 0); put(1, 0, true); put(2, 1); put(3, 2); };
         if (s === 0) { later(500, () => { tapAt('kits', 3); show(3); }); later(1600, () => { tapAt('kits', 4); show(4); }); later(2700, () => { tapAt('kits', 1); show(1); }); }
@@ -712,8 +817,10 @@
           later(500, () => { tapAt('dsong', 2); cells[2].classList.add('arm'); }); later(1300, () => { tapAt('kits', 1); put(2, 1); cells[2].classList.remove('arm'); });
           later(2100, () => { tapAt('dsong', 3); cells[3].classList.add('arm'); }); later(2900, () => { tapAt('kits', 2); put(3, 2); cells[3].classList.remove('arm'); }); }
         if (s === 2) { preset(); [[0, 0], [1, 0], [2, 1], [3, 2]].forEach(([c, k], n) => later(200 + n * 950, () => { now(c); show(k); })); }
-        if (s === 3) { preset(); later(500, () => dev(1)); later(1200, () => { $('lcdNo').textContent = 'KIT 012'; $('lcdKn').textContent = 'SPD Loops'; });
-          later(1900, () => dev(2)); later(2500, () => { $('lcdNo').textContent = 'PC 5'; $('lcdKn').textContent = 'Fusion'; }); later(3300, () => { dev(0); show(0); }); }
+        const lcd = (b, n, k) => { $('drBrand').textContent = b; $('lcdNo').textContent = n; $('lcdKn').textContent = k; };
+        if (s === 3) { preset(); later(400, () => { dev(1); lcd('ROLAND · SPD-SX PRO', 'KIT 012', 'SPD Loops'); });
+          later(1300, () => { dev(2); lcd('ROLAND · TD-20', 'PC 5', 'Fusion'); });
+          later(2200, () => { dev(3); lcd('KEMPER · PROFILER', 'PERF 12 · SLOT 3', 'Lead Crunch'); }); later(3500, () => { dev(0); show(0); $('drBrand').textContent = 'ROLAND · TD-27'; }); }
       } },
     help: {
       html: () => `<div class="hp"><div class="search" id="q"></div><div class="res" id="res">${[['<b>Looper</b>-Seite · Die Ringe', 1], ['<b>Looper</b> aus dem Arrangement steuern', 0], ['Clips · Reiter <b>Looper</b>', 0]].map((r) => `<div${r[1] ? ' data-hit="1"' : ''}>${r[0]}</div>`).join('')}</div><div class="tabkey" id="tabk">⇥ Tab</div></div>`,
