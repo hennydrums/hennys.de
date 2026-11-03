@@ -78,12 +78,14 @@
       box-shadow: 0 10px 14px -10px #000c; }
     .ttl h3 { font-size: 22px; } .one { margin-bottom: 12px; }
   }
-  /* Handy: Bildschirm groesser (1,8-fach) im Ausschnitt -- die "Kamera" faehrt dorthin, wo gerade getippt wird */
+  /* Handy: Bildschirm im Hochformat, ganz sichtbar. Die Masse (cqw) beziehen sich auf .scrcam, die 1,8-mal so breit ist
+     wie der Bildschirm -- so bleibt die Schrift lesbar, und die Szenen ordnen sich untereinander an. */
   .scrcam { position: relative; }
   @media (max-width: 600px) {
-    .scrcam { overflow: hidden; border-radius: 12px; }
-    .scrcam .screen { width: 180%; border-width: 5px; transform: translateX(var(--camx, -22%)); transition: transform .7s cubic-bezier(.3,.7,.2,1); }
-    .scrcam .screen .cap { left: calc(3cqw - var(--camx, -22%)); right: auto; max-width: 52%; font-size: 2.6cqw; transition: left .7s cubic-bezier(.3,.7,.2,1), opacity .4s, transform .4s; }   /* Beschriftung bleibt im Ausschnitt */
+    .scrwrap { overflow: hidden; }
+    .scrcam { width: 180%; container-type: inline-size; }
+    .scrcam .screen { width: 55.56%; aspect-ratio: 3 / 4; container-type: normal; border-width: 5px; }
+    .scrcam .screen .cap { right: auto; max-width: 48cqw; font-size: 2.6cqw; }
   }
   .close { position: absolute; top: 12px; right: 14px; border: 0; background: none; color: var(--dim); font-size: 22px; cursor: pointer; z-index: 2; }
   .close:hover { color: var(--fg); }
@@ -390,6 +392,20 @@
   footer a { color: var(--dim); text-decoration: none; margin-right: 14px; }
   .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; } .reveal.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .tile, .reveal { opacity: 1 !important; transform: none !important; } }
+  /* Handy: Szenen untereinander statt nebeneinander (steht am Ende, damit es die Szenen-Regeln ueberschreibt) */
+  @media (max-width: 600px) {
+    .screen .tb #tbNav { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; } .screen .tb .sp { display: none; }
+    .songs, .ls, .mon, .dr, .lk { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: start; }
+    .side { flex-direction: row; flex-wrap: wrap; align-items: flex-start; } .side .fb, .side .staff { flex: 1 1 40%; }
+    .lp { grid-template-columns: repeat(2, 1fr); gap: 3cqw; padding: 0 6cqw; }
+    .map .bx { width: 15cqw; font-size: 1.3cqw; }
+    .phn { height: 34cqw; }
+    .edr:has(.m.t) { display: none; }
+    .rig { height: 30cqw; } .lk { padding-bottom: 0; }
+    .map .bx.out { left: auto !important; right: 0; }
+    .dsong > div { min-width: 0; overflow: hidden; padding: .6cqw .7cqw; } .dsong .k { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hub { flex-wrap: wrap; }
+  }
 </style>
 </head>
 <body>
@@ -510,7 +526,7 @@
   const TL = {
     p0f: [['Everything in Pro for 14 days', 'Alles aus Pro, 14 Tage lang'], ['Afterwards: free with 1 looper', 'Danach kostenlos weiter mit 1 Looper']],
     p1f: [['Up to 4 loopers', 'Bis zu 4 Looper'], ['Clips with MC6 Pro, Songs & setlist', 'Clips mit MC6 Pro, Songs & Setlist'], ['nanoKONTROL2 and SPD-SX PRO', 'nanoKONTROL2 und SPD-SX PRO'], ['Display on every tablet and phone', 'Anzeige auf jedem Tablet und Handy']],
-    p2f: [['Everything in Lite, up to 8 loopers', 'Alles aus Lite, bis zu 8 Looper'], ['Lead Sheet with chords, fretboard and notes', 'Lead Sheet mit Akkorden, Griffbrett und Noten'], ['Mixer, audio interface presets, MIDI mapping', 'Mixer, Soundkarten-Presets, MIDI-Zuordnung'], ['Second Mac, Lights and Drums', 'Zweiter Mac, Lights und Drums']],
+    p2f: [['Everything in Lite, up to 8 loopers', 'Alles aus Lite, bis zu 8 Looper'], ['Lead Sheet with chords, fretboard and notes', 'Lead Sheet mit Akkorden, Griffbrett und Noten'], ['Mixer, audio interface presets, MIDI mapping', 'Mixer, Soundkarten-Presets, MIDI-Zuordnung'], ['Monitor mixer: every musician mixes their own in-ear', 'Monitor-Mixer: jeder mischt seinen In-Ear selbst'], ['Second Mac, Lights and devices (drums, Kemper)', 'Zweiter Mac, Lights und Geräte (Drums, Kemper)']],
     terms: [['Licence forever – runs as long as you like', 'Lizenz für immer – läuft, solange du willst'], ['12 months of updates included; renewal optional (Lite 29 €, Pro 79 €)', '12 Monate Updates inklusive; Verlängerung optional (Lite 29 €, Pro 79 €)'],
       ['2 Macs per licence, movable to a new Mac', '2 Macs je Lizenz, auf einen neuen Mac übertragbar'], ['14 days money back, no questions asked', '14 Tage Geld zurück, ohne Angabe von Gründen'],
       ['Secure checkout via Stripe (card, Apple Pay, Google Pay and more)', 'Sicher bezahlen über Stripe (Karte, Apple Pay, Google Pay u. a.)'], ['Invoice with VAT from Stripe', 'Rechnung mit MwSt. von Stripe'], ['Upgrade Lite → Pro: pay only the difference', 'Upgrade Lite → Pro: nur die Differenz zahlen']],
@@ -524,7 +540,7 @@
         ['Sections as big buttons', 'Abschnitte als große Tasten', 'Tap: jump there, quantized. Hold: loop it. Stop after song: Live waits at the next one.', 'Tippen: quantisiert hinspringen. Halten: loopen. Nach dem Song stoppen: Live wartet am nächsten.'],
         ['Edit the arrangement', 'Arrangement bearbeiten', 'The whole song at a glance: sections, chords, lyrics, loopers, light and kits – drag borders, split, rename.', 'Der ganze Song auf einen Blick: Abschnitte, Akkorde, Text, Looper, Licht und Kits – Ränder ziehen, teilen, umbenennen.'],
         ['Practice mode', 'Übungsmodus', 'Pick the sections, add one or two bars of count-in – StageCase loops them. Or build a rehearsal mix from several songs.', 'Abschnitte wählen, ein oder zwei Takte Einzähler dazu – StageCase loopt sie. Oder einen Probe-Mix aus mehreren Songs bauen.']] },
-    { id: 'leadsheet', ic: '♪', c: '#ffd60a', cam: 0.33, t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard, notes and your own comments', 'Text mit Akkorden, Griffbrett, Noten und eigenen Kommentaren'],
+    { id: 'leadsheet', ic: '♪', c: '#ffd60a', t: ['Lead Sheet', 'Lead Sheet'], d: ['Lyrics with chords, fretboard, notes and your own comments', 'Text mit Akkorden, Griffbrett, Noten und eigenen Kommentaren'],
       one: ['The current song as a sheet that reads along – with chords, fretboard, notes and comments for every musician.', 'Der aktuelle Song als Blatt, das mitliest – mit Akkorden, Griffbrett, Noten und Kommentaren für jeden Musiker.'],
       ch: [['Reads along', 'Liest mit', 'The line being played is highlighted – tap a line to jump there.', 'Die gespielte Zeile ist hinterlegt – Tipp auf eine Zeile springt hin.'],
         ['Chords and transposing', 'Akkorde und Transponieren', 'Chords from the lyrics or a +Chords track – ♭ ♯ moves them per song, and the chord track in Live plays along.', 'Akkorde aus dem Text oder einer +Chords-Spur – ♭ ♯ verschiebt sie je Song, und die Akkordspur in Live spielt mit.'],
@@ -838,17 +854,9 @@
   const DUR = 4200;
   const later = (ms, fn) => { timers.push(setTimeout(fn, ms)); };
   const clearT = () => { timers.forEach(clearTimeout); timers = []; clearTimeout(adv); };
-  // Handy: Kamera auf die Stelle x (0..1 der Bildschirmbreite) -- der vergroesserte Bildschirm rutscht seitlich
-  function cam(x) {
-    const w = $('screen'), c = $('scrcam'); if (!w || !c) return;
-    if (!matchMedia('(max-width: 600px)').matches) { w.style.removeProperty('--camx'); return; }
-    const W = w.offsetWidth, V = c.clientWidth, px = Math.max(V - W, Math.min(0, V / 2 - x * W));
-    w.style.setProperty('--camx', Math.round(px) + 'px');
-  }
   function tapAt(parentId, i) {
     const t = $('tap'), el = $(parentId).children[i]; if (!t || !el) return;
     const s = $('screen').getBoundingClientRect(), r = el.getBoundingClientRect();
-    cam((r.left - s.left + r.width / 2) / s.width);
     t.style.left = (r.left - s.left + r.width / 2 - 8) + 'px'; t.style.top = (r.top - s.top + r.height / 2 - 8) + 'px';
     t.classList.remove('go'); void t.offsetWidth; t.classList.add('go');
   }
@@ -861,7 +869,6 @@
     $('chap').innerHTML = p.ch.map((c, k) => `<li data-k="${k}"${k === s ? ' class="on"' : ''} style="--dur:${DUR}ms"><b>${esc(de ? c[1] : c[0])}</b><span>${esc(de ? c[3] : c[2])}</span><i class="bar"></i></li>`).join('');
     const scn = $('scn'); if (first || !scn.firstChild) { scn.className = 'scn'; scn.innerHTML = SC[p.id].html(); }
     const cap = $('cap'); cap.classList.remove('show'); cap.textContent = de ? p.ch[s][1] : p.ch[s][0]; later(60, () => cap.classList.add('show'));
-    if (first || s === 0) cam(p.cam || 0.42);            // Handy: neuer Bereich -- Kamera auf die Mitte-links (dort beginnen die Szenen; je Bereich anpassbar)
     SC[p.id].step(s);
     // schmal: aktives Kapitel unter den stehenden Bildschirm rollen
     if (matchMedia('(max-width: 900px)').matches) {
