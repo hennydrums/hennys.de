@@ -87,6 +87,14 @@
   .outs div { display: flex; justify-content: space-between; gap: 10px; background: #141418; border-radius: 8px; padding: 6px 10px; font-size: 13px; color: var(--dim); }
   .outs div b { margin: 0; color: var(--fg); font-size: 13px; }
   .tabs { margin-top: 14px; text-align: center; color: var(--dim); font-size: 14px; }
+  .rig .lk { height: 34px; margin-top: -10px; border-bottom: 2px dashed rgba(100,210,255,.6); }
+  .rig .lk.l { grid-column: 1; margin-left: 50%; border-left: 2px dashed rgba(100,210,255,.6); border-bottom-left-radius: 14px; margin-right: -10px; }
+  .rig .lk.m { grid-column: 2 / 5; position: relative; margin-left: -10px; margin-right: -10px; }
+  .rig .lk.r { grid-column: 5; margin-right: 50%; border-right: 2px dashed rgba(100,210,255,.6); border-bottom-right-radius: 14px; margin-left: -10px; }
+  .rig .pill { position: absolute; left: 50%; bottom: -15px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; background: #10202f; border: 1px solid rgba(100,210,255,.6); color: #cfeeff; font: 700 13px -apple-system, Helvetica, Arial; padding: 4px 12px; border-radius: 999px; }
+  .rig { padding-bottom: 40px; }
+  .rig > .node { align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+  @media (max-width: 760px) { .rig .lk { display: none; } .rig { padding-bottom: 26px; } }
   .net { display: flex; align-items: center; gap: 16px; margin-top: 12px; padding: 16px 20px; border: 1.5px dashed rgba(100,210,255,.45); border-radius: 16px; background: rgba(10,132,255,.06); }
   .net .nic { display: flex; gap: 8px; flex: none; } .net b { display: block; } .net span span, .net div span { color: var(--dim); font-size: 14px; }
   @media (max-width: 760px) { .rig { grid-template-columns: 1fr; } .arr { transform: rotate(90deg); } }
@@ -196,9 +204,10 @@
       <div class="node"><div class="ic">🎛️</div><b>Audio-Interface</b>
         <div class="outs"><div><b>Out 1</b>Click</div><div><b>Out 2</b>Ansagen</div><div><b>Out 3 + 4</b>Playback</div></div></div>
       <div class="arr">→<small>Audio</small></div>
-      <div class="node"><div class="ic">🎚️</div><b>Mischpult</b><small>Click und Ansagen nur aufs In-Ear</small></div>
+      <div class="node"><div class="ic">🎚️</div><b>In-Ear-Mischpult</b><small>z. B. Soundcraft Ui24R</small></div>
+      <div class="lk l"></div><div class="lk m"><span class="pill"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#64d2ff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v10h-4v3H8v-3H4z"/><path d="M8 9.5v2.5M10.7 9.5v2.5M13.3 9.5v2.5M16 9.5v2.5" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#64d2ff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.8 12.6a9 9 0 0 1 12.4 0"/><path d="M9.2 16.1a4.2 4.2 0 0 1 5.6 0"/><circle cx="12" cy="19.4" r="1.3" fill="#64d2ff" stroke="none"/></svg> LAN oder WLAN – direkt</span></div><div class="lk r"></div>
     </div>
-    <div class="net"><span class="nic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#64d2ff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v10h-4v3H8v-3H4z"/><path d="M8 9.5v2.5M10.7 9.5v2.5M13.3 9.5v2.5M16 9.5v2.5" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#64d2ff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.8 12.6a9 9 0 0 1 12.4 0"/><path d="M9.2 16.1a4.2 4.2 0 0 1 5.6 0"/><circle cx="12" cy="19.4" r="1.3" fill="#64d2ff" stroke="none"/></svg></span><div><b>Netzwerk – LAN-Kabel oder WLAN</b><span>Der Mac steuert darüber den In-Ear-Mix am Pult, Tablets und Handys zeigen das Display – QR-Code scannen, fertig.</span></div></div>
+    <div class="net"><span class="nic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#64d2ff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v10h-4v3H8v-3H4z"/><path d="M8 9.5v2.5M10.7 9.5v2.5M13.3 9.5v2.5M16 9.5v2.5" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#64d2ff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.8 12.6a9 9 0 0 1 12.4 0"/><path d="M9.2 16.1a4.2 4.2 0 0 1 5.6 0"/><circle cx="12" cy="19.4" r="1.3" fill="#64d2ff" stroke="none"/></svg></span><div><b>StageCase Go steuert das In-Ear-Pult direkt</b><span>Der Mac ist per LAN-Kabel oder WLAN mit dem Pult verbunden – ohne Pult-App, ohne Umweg. Jeder Musiker regelt seinen eigenen AUX-Mix auf dem Tablet oder Handy: sich selbst lauter, Click leiser, fertig. Dieselben Geräte zeigen auch das Display – QR-Code scannen genügt.</span></div></div>
   </section>
 
   <section class="s" id="preise">
